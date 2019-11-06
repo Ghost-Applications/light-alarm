@@ -1,8 +1,10 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.ui
 
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import cash.andrew.lightalarm.AlarmApp
+import cash.andrew.lightalarm.ComponentContainer
 import dagger.BindsInstance
 import dagger.Module
 import dagger.Subcomponent
@@ -16,6 +18,7 @@ annotation class ActivityScope
 interface ActivityComponent {
 
     fun inject(activity: MainActivity)
+    fun inject(alarmListItemView: AlarmListItemView)
 
     @Subcomponent.Builder
     interface Builder {
@@ -24,8 +27,6 @@ interface ActivityComponent {
         fun build(): ActivityComponent
     }
 }
-
-fun Fragment.getComponent() = requireContext().activityComponent
 
 fun <T> T.makeComponent():
         ActivityComponent where T : ComponentContainer<ActivityComponent>,
@@ -38,7 +39,6 @@ fun <T> T.makeComponent():
 @Suppress("UNCHECKED_CAST")
 val Context.activityComponent
     get() = (this as ComponentContainer<ActivityComponent>).component
-
 
 @Module
 object ActivityModule {

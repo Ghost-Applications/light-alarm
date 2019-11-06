@@ -1,12 +1,15 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.data
 
 import android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE
 import android.hardware.camera2.CameraManager
-import cash.andrew.lightalarm.LightController.LightState.OFF
-import cash.andrew.lightalarm.LightController.LightState.ON
+import cash.andrew.lightalarm.data.LightController.LightState.OFF
+import cash.andrew.lightalarm.data.LightController.LightState.ON
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LightController(private val cameraManager: CameraManager) {
+@Singleton
+class LightController @Inject constructor(private val cameraManager: CameraManager) {
 
     private val cameraWithFlashLightId =
         cameraManager.cameraIdList

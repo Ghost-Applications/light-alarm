@@ -1,4 +1,4 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.ui
 
 import android.widget.ViewAnimator
 import androidx.annotation.IdRes

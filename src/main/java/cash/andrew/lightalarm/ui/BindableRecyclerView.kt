@@ -1,9 +1,10 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import cash.andrew.lightalarm.ui.BindableRecyclerAdapter.BindableViewHolder
 
 /**
  * A recycler view adapter that makes life better.
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @author Andrew Reitz
  * @since 2.0.0
  */
-abstract class BindableRecyclerAdapter<I> : RecyclerView.Adapter<BindableRecyclerAdapter.BindableViewHolder>() {
+abstract class BindableRecyclerAdapter<I> : RecyclerView.Adapter<BindableViewHolder>() {
 
     /**
      * Create a new view for the view type.

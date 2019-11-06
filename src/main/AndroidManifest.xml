@@ -3,35 +3,51 @@
     package="cash.andrew.lightalarm">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
+        android:name=".AlarmApp"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".AlarmApp">
+        >
+
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".reciever.BootReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".reciever.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity
-            android:name=".AlarmActivity"
-            android:label="@string/title_activity_alarm"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.AlarmActivity"
+            android:label="@string/title_activity_alarm"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

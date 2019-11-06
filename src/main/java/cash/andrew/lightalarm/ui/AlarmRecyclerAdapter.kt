@@ -1,8 +1,12 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cash.andrew.lightalarm.data.Alarm
+import cash.andrew.lightalarm.R.layout
+import cash.andrew.lightalarm.data.AlarmKeeper
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScope
@@ -12,12 +16,16 @@ class AlarmRecyclerAdapter @Inject constructor(keeper: AlarmKeeper) : BindableRe
 
     fun addAlarm(alarm: Alarm) {
         alarms.add(alarm)
-        // todo sort by time
         notifyItemInserted(alarms.size)
     }
 
+    fun removeAlarm(position: Int) {
+        alarms.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun newView(layoutInflater: LayoutInflater, viewType: Int, parent: ViewGroup): View  = layoutInflater
-        .inflate(R.layout.alarm_list_item_view, parent, false)
+        .inflate(layout.alarm_list_item_view, parent, false)
 
     override fun getItem(position: Int): Alarm = alarms[position]
 
