@@ -6,14 +6,12 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
-import android.preference.PreferenceManager
 import android.text.format.DateFormat
 import androidx.core.content.getSystemService
 import cash.andrew.lightalarm.data.DataModule
 import cash.andrew.lightalarm.reciever.AlarmReceiver
-import cash.andrew.lightalarm.reciever.BootReceiver
+import cash.andrew.lightalarm.reciever.AlarmBootReceiver
 import cash.andrew.lightalarm.ui.ActivityComponent
-import cash.andrew.lightalarm.ui.activityComponent
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -26,14 +24,14 @@ import javax.inject.Singleton
 val componentBuilder: AlarmAppComponent.Builder = DaggerAlarmAppComponent.builder()
 
 @Suppress("UNCHECKED_CAST")
-val Context.alarmAppComponent: AlarmAppComponent get() = (this as ComponentContainer<AlarmAppComponent>).component
+val Context.alarmAppComponent: AlarmAppComponent get() = (applicationContext as ComponentContainer<AlarmAppComponent>).component
 
 @Singleton
 @Component(modules = [AlarmAppModule::class, DataModule::class])
 interface AlarmAppComponent {
 
     fun inject(alarmReceiver: AlarmReceiver)
-    fun inject(bootReceiver: BootReceiver)
+    fun inject(bootReceiver: AlarmBootReceiver)
 
     val activityComponentBuilder: ActivityComponent.Builder
     val notificationManager: NotificationManager

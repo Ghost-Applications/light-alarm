@@ -3,6 +3,7 @@ package cash.andrew.lightalarm.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.R.layout
 import cash.andrew.lightalarm.data.AlarmKeeper
@@ -12,11 +13,19 @@ import javax.inject.Inject
 @ActivityScope
 class AlarmRecyclerAdapter @Inject constructor(keeper: AlarmKeeper) : BindableRecyclerAdapter<Alarm>() {
 
-    private val alarms: MutableList<Alarm> = keeper.alarms.toMutableList()
+    private val alarms: MutableList<Alarm> = keeper.alarms
+        .toMutableList()
+        .apply { sortBy { it.time } }
 
     fun addAlarm(alarm: Alarm) {
+        val oldList = alarms.toList()
+
         alarms.add(alarm)
-        notifyItemInserted(alarms.size)
+        alarms.sortBy { it.time }
+
+        val alarmDiffCallback = AlarmDiffCallback(oldList, alarms)
+        val diffResult = DiffUtil.calculateDiff(alarmDiffCallback)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun removeAlarm(position: Int) {
@@ -32,4 +41,19 @@ class AlarmRecyclerAdapter @Inject constructor(keeper: AlarmKeeper) : BindableRe
     override fun bindView(item: Alarm, view: View, position: Int) = view.let { it as AlarmListItemView }.bind(item)
 
     override fun getItemCount(): Int = alarms.size
+}
+
+class AlarmDiffCallback(
+    private val oldList: List<Alarm>,
+    private val newList: List<Alarm>
+): DiffUtil.Callback() {
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition].id == newList[newItemPosition].id
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition] == newList[newItemPosition]
+
 }

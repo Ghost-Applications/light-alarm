@@ -1,32 +1,23 @@
 package cash.andrew.lightalarm.ui
 
 import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchUIUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cash.andrew.lightalarm.data.Alarm
-import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.R
 import cash.andrew.lightalarm.R.layout
-import cash.andrew.lightalarm.data.ALARM_ID_KEY
 import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 import java.time.LocalTime
-import java.time.ZonedDateTime
-import java.util.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
@@ -45,7 +36,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         setSupportActionBar(toolbar)
         component.inject(this)
 
-        main_activity_container.displayedChildId = if (alarmKeeper.hasAlarms) alarms_list.id else main_no_alarms_setup.id
+       showAlarmList()
 
         alarms_list.layoutManager = LinearLayoutManager(this)
         alarms_list.adapter = alarmAdapter
@@ -54,11 +45,12 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
             view = alarms_list,
             alarmKeeper = alarmKeeper,
             alarmAdapter = alarmAdapter,
-            alarmScheduler = alarmScheduler
+            alarmScheduler = alarmScheduler,
+            refreshView = ::showAlarmList
         )
         ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(alarms_list)
 
-        fab.setOnClickListener {
+        fab.debounceClickListener {
             TimePickerDialog(this, { _, hour, minute ->
 
                 val alarm = Alarm(
@@ -71,8 +63,18 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
                 // un-schedule and reschedule alarms
                 alarmScheduler.scheduleNextAlarm()
 
+                showAlarmList()
+
             }, 12, 0, DateFormat.is24HourFormat(this)).show()
         }
+    }
+
+    /** Shows alarm list or the no alarms set up message depending on if there are alarms. */
+    private fun showAlarmList() {
+        main_activity_container.displayedChildId = if (alarmKeeper.hasAlarms) {
+            alarms_list.id
+        }
+        else main_no_alarms_setup.id
     }
 }
 
@@ -80,7 +82,8 @@ class SwipeToRemoveAlarmHelper(
     private val view: View,
     private val alarmKeeper: AlarmKeeper,
     private val alarmAdapter: AlarmRecyclerAdapter,
-    private val alarmScheduler: AlarmScheduler
+    private val alarmScheduler: AlarmScheduler,
+    private val refreshView: () -> Unit
 ) : ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     override fun onMove(
         recyclerView: RecyclerView,
@@ -94,11 +97,15 @@ class SwipeToRemoveAlarmHelper(
         alarmKeeper.removeAlarm(removedAlarm)
         alarmAdapter.removeAlarm(position)
         alarmScheduler.scheduleNextAlarm()
+        refreshView()
 
         Snackbar.make(view, view.context.getString(R.string.alarm_removed), Snackbar.LENGTH_LONG)
             .setAction(view.context.getString(R.string.undo)) {
                 alarmKeeper.addAlarm(removedAlarm)
+                alarmAdapter.addAlarm(removedAlarm)
                 alarmScheduler.scheduleNextAlarm()
+
+                refreshView()
             }
             .show()
     }

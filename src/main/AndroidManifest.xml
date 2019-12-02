@@ -18,7 +18,7 @@
         >
 
         <receiver
-            android:name=".reciever.BootReceiver"
+            android:name=".reciever.AlarmBootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

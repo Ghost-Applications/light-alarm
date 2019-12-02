@@ -27,7 +27,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("onReceived called context=$context, intent=$intent")
 
-        context.applicationContext.alarmAppComponent.inject(this)
+        context.alarmAppComponent.inject(this)
 
         alarmScheduler.scheduleNextAlarm()
         lightController.turnOn()

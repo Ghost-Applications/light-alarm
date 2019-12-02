@@ -85,7 +85,6 @@ class AlarmListItemView(
 
             val newAlarm = copy(repeat = isChecked)
             alarmKeeper.updateAlarm(newAlarm)
-
             alarmScheduler.scheduleNextAlarm()
         }
 
@@ -100,7 +99,6 @@ class AlarmListItemView(
                 )
 
                 alarmKeeper.updateAlarm(updated)
-
                 alarmScheduler.scheduleNextAlarm()
             }
         }
