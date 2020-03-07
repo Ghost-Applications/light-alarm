@@ -1,14 +1,12 @@
-import groovy.lang.Closure
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  val kotlinVersion = "1.3.50"
-  id("com.android.application") version "3.4.0"
+  val kotlinVersion = "1.3.70"
+  id("com.android.application") version "3.6.0"
   id("kotlin-android") version kotlinVersion
   id("kotlin-kapt") version kotlinVersion
   id("kotlin-android-extensions") version kotlinVersion
-  id("com.gradle.build-scan") version "2.4.2"
-  id("com.github.ben-manes.versions") version "0.27.0"
+  id("com.github.ben-manes.versions") version "0.28.0"
 }
 
 repositories {
@@ -17,15 +15,9 @@ repositories {
   jcenter()
 }
 
-buildScan {
-  termsOfServiceUrl = "https://gradle.com/terms-of-service"
-  termsOfServiceAgree = "yes"
-  publishAlways()
-}
-
 android {
   compileSdkVersion(29)
-  buildToolsVersion("29.0.0")
+  buildToolsVersion("29.0.2")
 
   defaultConfig {
     applicationId = "cash.andrew.lightalarm"
@@ -63,19 +55,19 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
 
   implementation("androidx.appcompat:appcompat:1.1.0")
-  implementation("androidx.core:core-ktx:1.1.0")
+  implementation("androidx.core:core-ktx:1.2.0")
   implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
-  implementation("com.google.android.material:material:1.0.0")
-  implementation("com.google.dagger:dagger:2.25.2")
-  kapt("com.google.dagger:dagger-compiler:2.25.2")
+  implementation("com.google.android.material:material:1.1.0")
+  implementation("com.google.dagger:dagger:2.26")
+  kapt("com.google.dagger:dagger-compiler:2.26")
 
   implementation("com.jakewharton.timber:timber:4.7.1")
 
   implementation("io.paperdb:paperdb:2.6")
 
   testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-  testImplementation("com.google.truth:truth:1.0")
+  testImplementation("com.google.truth:truth:1.0.1")
 }
 
 tasks.withType < KotlinCompile > {

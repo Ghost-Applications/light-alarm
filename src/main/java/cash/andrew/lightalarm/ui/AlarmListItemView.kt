@@ -58,8 +58,9 @@ class AlarmListItemView(
         context.activityComponent.inject(this)
     }
 
-    fun bind(alarm: Alarm) = with(alarm) {
-        setupViewWithAlarmData()
+    fun bind(alarm: Alarm) {
+        val currentAlarm = { alarmKeeper.getAlarmById(alarm.id)!! }
+        alarm.setupViewWithAlarmData()
 
         enable_alarm_switch.setOnCheckedChangeListener { _, isChecked ->
             // disable all the things and delete the alarm for the alarm
@@ -67,7 +68,7 @@ class AlarmListItemView(
             repeat_checkbox.isEnabled = isChecked
             alarm_day_group.children.forEach { it.isEnabled = isChecked }
 
-            val newAlarm = copy(enabled = isChecked)
+            val newAlarm = currentAlarm().copy(enabled = isChecked)
             alarmKeeper.updateAlarm(newAlarm)
 
             alarmScheduler.scheduleNextAlarm()
@@ -75,7 +76,7 @@ class AlarmListItemView(
 
         strobe_checkbox.setOnCheckedChangeListener { _, isChecked ->
             // update alarm on disk...
-            val newAlarm = copy(strobe = isChecked)
+            val newAlarm = currentAlarm().copy(strobe = isChecked)
             alarmKeeper.updateAlarm(newAlarm)
         }
 
@@ -83,7 +84,7 @@ class AlarmListItemView(
             // deal with alarm being one time or schedule for each day...
             alarm_day_group.children.forEach { it.isEnabled = isChecked }
 
-            val newAlarm = copy(repeat = isChecked)
+            val newAlarm = currentAlarm().copy(repeat = isChecked)
             alarmKeeper.updateAlarm(newAlarm)
             alarmScheduler.scheduleNextAlarm()
         }
@@ -92,8 +93,8 @@ class AlarmListItemView(
             it.setOnCheckedChangeListener { buttonView, isChecked ->
                 // update and schedule
                 val dayOfWeek = buttonView.tag as DayOfWeek
-                val updated = copy(
-                    days = days.toMutableSet()
+                val updated = currentAlarm().copy(
+                    days = currentAlarm().days.toMutableSet()
                         .apply { if (isChecked) add(dayOfWeek) else remove(dayOfWeek) }
                         .toEnumSet()
                 )
@@ -131,17 +132,5 @@ class AlarmListItemView(
             dayChip.tag = dayOfWeek
             dayChip.isChecked = days.contains(dayOfWeek)
         }
-
-//        days.forEach { dayOfWeek ->
-//            when (dayOfWeek!!) {
-//                MONDAY -> chip_monday
-//                TUESDAY -> chip_tuesday
-//                WEDNESDAY -> chip_wednesday
-//                THURSDAY -> chip_thursday
-//                FRIDAY -> chip_friday
-//                SATURDAY -> chip_saturday
-//                SUNDAY -> chip_sunday
-//            }.isChecked = true
-//        }
     }
 }

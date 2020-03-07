@@ -1,12 +1,14 @@
 package cash.andrew.lightalarm.data
 
 import io.paperdb.Book
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val COLLECTION_KEY = "alarms"
 
 interface AlarmKeeper {
+    fun getAlarmById(id: UUID): Alarm?
     fun addAlarm(alarm: Alarm)
     fun updateAlarm(newAlarm: Alarm)
     fun removeAlarm(alarm: Alarm)
@@ -17,6 +19,8 @@ interface AlarmKeeper {
 @Singleton
 class DefaultAlarmKeeper @Inject constructor(private val alarmBook: Book): AlarmKeeper {
 
+    override fun getAlarmById(id: UUID): Alarm? = alarms.find { it.id == id }
+
     override fun addAlarm(alarm: Alarm) {
         val alarms = this.alarms.toMutableList()
         alarms.add(alarm)
@@ -25,15 +29,14 @@ class DefaultAlarmKeeper @Inject constructor(private val alarmBook: Book): Alarm
 
     override fun updateAlarm(newAlarm: Alarm) {
         val alarms = this.alarms.toMutableList()
-        val originalAlarm = alarms.find { it.id == newAlarm.id }
-        alarms.remove(originalAlarm)
+        alarms.removeIf { newAlarm.id == it.id }
         alarms.add(newAlarm)
         updateAlarms(alarms)
     }
 
     override fun removeAlarm(alarm: Alarm) {
         val alarms = this.alarms.toMutableList()
-        alarms.remove(alarm)
+        alarms.removeIf { alarm.id == it.id }
         updateAlarms(alarms)
     }
 
