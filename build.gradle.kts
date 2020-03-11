@@ -5,7 +5,6 @@ plugins {
   id("com.android.application") version "3.6.0"
   id("kotlin-android") version kotlinVersion
   id("kotlin-kapt") version kotlinVersion
-  id("kotlin-android-extensions") version kotlinVersion
   id("com.github.ben-manes.versions") version "0.28.0"
 }
 
@@ -48,6 +47,10 @@ android {
 
   sourceSets.all {
     java.srcDirs(file("src/$name/kotlin"))
+  }
+
+  viewBinding {
+    isEnabled = true
   }
 }
 

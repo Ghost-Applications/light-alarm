@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.R
-import cash.andrew.lightalarm.R.layout
 import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
+import cash.andrew.lightalarm.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -29,28 +28,33 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
     @Inject lateinit var alarmAdapter: AlarmRecyclerAdapter
     @Inject lateinit var alarmScheduler: AlarmScheduler
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(layout.activity_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setSupportActionBar(binding.toolbar)
         component.inject(this)
 
-       showAlarmList()
+        showAlarmList()
 
-        alarms_list.layoutManager = LinearLayoutManager(this)
-        alarms_list.adapter = alarmAdapter
+        binding.alarmsList.layoutManager = LinearLayoutManager(this)
+        binding.alarmsList.adapter = alarmAdapter
 
         val swipeToRemoveAlarmHelper = SwipeToRemoveAlarmHelper(
-            view = alarms_list,
+            view = binding.alarmsList,
             alarmKeeper = alarmKeeper,
             alarmAdapter = alarmAdapter,
             alarmScheduler = alarmScheduler,
             refreshView = ::showAlarmList
         )
-        ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(alarms_list)
+        ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(binding.alarmsList)
 
-        fab.debounceClickListener {
+        binding.fab.debounceClickListener {
             TimePickerDialog(this, { _, hour, minute ->
 
                 val alarm = Alarm(
@@ -71,10 +75,10 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
 
     /** Shows alarm list or the no alarms set up message depending on if there are alarms. */
     private fun showAlarmList() {
-        main_activity_container.displayedChildId = if (alarmKeeper.hasAlarms) {
-            alarms_list.id
+        binding.mainActivityContainer.displayedChildId = if (alarmKeeper.hasAlarms) {
+            binding.alarmsList.id
         }
-        else main_no_alarms_setup.id
+        else binding.mainNoAlarmsSetup.id
     }
 }
 
