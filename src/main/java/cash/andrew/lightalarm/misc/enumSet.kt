@@ -1,4 +1,4 @@
-package cash.andrew.lightalarm
+package cash.andrew.lightalarm.misc
 
 import java.util.*
 

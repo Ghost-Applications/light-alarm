@@ -8,7 +8,7 @@ import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.databinding.AlarmListItemViewBinding
-import cash.andrew.lightalarm.toEnumSet
+import cash.andrew.lightalarm.misc.toEnumSet
 import java.time.DayOfWeek
 import java.time.DayOfWeek.FRIDAY
 import java.time.DayOfWeek.MONDAY

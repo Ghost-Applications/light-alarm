@@ -9,10 +9,9 @@ import android.content.Intent
 import androidx.core.content.getSystemService
 import cash.andrew.lightalarm.ALARM_CHANNEL_ID
 import cash.andrew.lightalarm.alarmAppComponent
-import cash.andrew.lightalarm.data.AlarmScheduler
-import cash.andrew.lightalarm.data.LightController
+import cash.andrew.lightalarm.data.*
+import cash.andrew.lightalarm.misc.getAlarmKeyExtra
 import cash.andrew.lightalarm.ui.AlarmActivity
-import cash.andrew.lightalarm.ui.activityComponent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -21,30 +20,42 @@ const val PENDING_INTENT_ID = 7589
 
 class AlarmReceiver : BroadcastReceiver() {
 
+    @Inject lateinit var alarmKeeper: AlarmKeeper
     @Inject lateinit var lightController: LightController
     @Inject lateinit var alarmScheduler: AlarmScheduler
 
     override fun onReceive(context: Context, intent: Intent) {
-        Timber.d("onReceived called context=$context, intent=$intent")
+        Timber.d("onReceived called context=%s, intent=%s", context, intent)
+
+        val id = intent.getAlarmKeyExtra()
+        val alarm = alarmKeeper.getAlarmById(id)!!
 
         context.alarmAppComponent.inject(this)
 
         alarmScheduler.scheduleNextAlarm()
+
+        if (alarm.strobe) {
+            context.startStrobeService()
+            return
+        }
+
         lightController.turnOn()
 
         val activityIntent = Intent(context, AlarmActivity::class.java)
         val operation = PendingIntent.getActivity(
             context,
-            PENDING_INTENT_ID, activityIntent,
+            PENDING_INTENT_ID,
+                activityIntent,
             PendingIntent.FLAG_CANCEL_CURRENT
         )
 
         val notification = Notification.Builder(context, ALARM_CHANNEL_ID)
             .setFullScreenIntent(operation, true)
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-            .setContentTitle("Light Alarm!")
+            .setContentTitle("Light Alarm!") // todo
             .build()
 
-        context.getSystemService<NotificationManager>()!!.notify(NOTIFICATION_ID, notification)
+        context.getSystemService<NotificationManager>()!!
+            .notify(NOTIFICATION_ID, notification)
     }
 }

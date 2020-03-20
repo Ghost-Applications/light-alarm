@@ -9,6 +9,7 @@ import android.hardware.camera2.CameraManager
 import android.text.format.DateFormat
 import androidx.core.content.getSystemService
 import cash.andrew.lightalarm.data.DataModule
+import cash.andrew.lightalarm.data.StrobeService
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.reciever.AlarmBootReceiver
 import cash.andrew.lightalarm.ui.ActivityComponent
@@ -30,6 +31,7 @@ val Context.alarmAppComponent: AlarmAppComponent get() = (applicationContext as 
 @Component(modules = [AlarmAppModule::class, DataModule::class])
 interface AlarmAppComponent {
 
+    fun inject(strobeService: StrobeService)
     fun inject(alarmReceiver: AlarmReceiver)
     fun inject(bootReceiver: AlarmBootReceiver)
 

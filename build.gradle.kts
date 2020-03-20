@@ -31,7 +31,6 @@ android {
       signingConfig = signingConfigs.getByName("debug")
       isMinifyEnabled = false
       isShrinkResources = false
-      buildConfigField("boolean", "MOSHI_GENERATOR_ENABLED", "false")
     }
     getByName("release") {
       isMinifyEnabled = false
@@ -43,10 +42,6 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-  }
-
-  sourceSets.all {
-    java.srcDirs(file("src/$name/kotlin"))
   }
 
   viewBinding {
@@ -64,6 +59,9 @@ dependencies {
   implementation("com.google.android.material:material:1.1.0")
   implementation("com.google.dagger:dagger:2.26")
   kapt("com.google.dagger:dagger-compiler:2.26")
+
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4")
 
   implementation("com.jakewharton.timber:timber:4.7.1")
 

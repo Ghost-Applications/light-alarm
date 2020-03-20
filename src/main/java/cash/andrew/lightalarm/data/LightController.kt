@@ -19,6 +19,8 @@ class LightController @Inject constructor(private val cameraManager: CameraManag
 
     private var state: LightState = OFF
 
+    val isLightOn get() = state == ON
+
     fun turnOn() {
         if (cameraWithFlashLightId == null) {
             Timber.w("No flashlights found")
@@ -37,6 +39,7 @@ class LightController @Inject constructor(private val cameraManager: CameraManag
         state = OFF
     }
 
+    val hasFlashLight get() = cameraWithFlashLightId != null
 
     enum class LightState {
         ON,

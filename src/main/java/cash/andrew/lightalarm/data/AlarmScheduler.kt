@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
+import cash.andrew.lightalarm.misc.putAlarmKeyExtra
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.ui.MainActivity
 import org.jetbrains.annotations.TestOnly
@@ -17,8 +18,6 @@ import javax.inject.Singleton
 
 private const val ALARM_EDIT_INTENT_ID = 5682
 private const val ALARM_BROADCAST_RECEIVER_ID = 4371
-
-const val ALARM_ID_KEY = "ALARM_ID"
 
 @Singleton
 class AlarmScheduler @Inject constructor(
@@ -80,7 +79,7 @@ class AlarmScheduler @Inject constructor(
         val operation = PendingIntent.getBroadcast(
             application,
             ALARM_BROADCAST_RECEIVER_ID,
-            Intent(application, AlarmReceiver::class.java).also { it.putExtra(ALARM_ID_KEY, alarmId) },
+            Intent(application, AlarmReceiver::class.java).also { it.putAlarmKeyExtra(alarmId) },
             PendingIntent.FLAG_CANCEL_CURRENT
         )
 

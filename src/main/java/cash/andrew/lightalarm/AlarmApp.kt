@@ -9,7 +9,7 @@ import timber.log.Timber.DebugTree
 
 const val ALARM_CHANNEL_ID = "Alarm"
 
-class AlarmApp : Application(), ComponentContainer<AlarmAppComponent>{
+class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
 
     private lateinit var _component: AlarmAppComponent
     override val component: AlarmAppComponent by lazy { _component }
