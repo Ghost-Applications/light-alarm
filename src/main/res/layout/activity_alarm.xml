@@ -8,4 +8,65 @@
     tools:context=".ui.AlarmActivity"
     >
 
+    <ImageView
+        android:id="@+id/alarm_off"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        app:srcCompat="@drawable/ic_alarm_off_black_24dp"
+        tools:ignore="ContentDescription"
+        />
+
+    <ImageView
+        android:id="@+id/alarm_snooze"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        app:srcCompat="@drawable/ic_snooze_black_24dp"
+        tools:ignore="ContentDescription"
+        />
+
+    <TextView
+        android:id="@+id/alarm_off_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alarm_off"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toEndOf="@+id/alarm_off"
+        app:layout_constraintStart_toStartOf="@+id/alarm_off"
+        app:layout_constraintTop_toBottomOf="@+id/alarm_off" />
+
+    <TextView
+        android:id="@+id/alarm_snooze_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/snooze_alarm"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_snooze"
+        app:layout_constraintEnd_toEndOf="@+id/alarm_snooze"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/alarm_snooze" />
+
+    <ImageView
+        android:id="@+id/alarm_slider"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:contentDescription="@string/swipe_up_or_down"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/animated_ring"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
-import cash.andrew.lightalarm.misc.putAlarmKeyExtra
+import cash.andrew.lightalarm.misc.putAlarmIdExtra
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.ui.MainActivity
 import org.jetbrains.annotations.TestOnly
@@ -68,7 +68,7 @@ class AlarmScheduler @Inject constructor(
         .sortedBy { (time) -> time }
         .firstOrNull()
 
-    private fun schedule(time: ZonedDateTime, alarmId: UUID) {
+    fun schedule(time: ZonedDateTime, alarmId: UUID) {
         val showIntent = PendingIntent.getActivity(
             application,
             ALARM_EDIT_INTENT_ID,
@@ -79,7 +79,7 @@ class AlarmScheduler @Inject constructor(
         val operation = PendingIntent.getBroadcast(
             application,
             ALARM_BROADCAST_RECEIVER_ID,
-            Intent(application, AlarmReceiver::class.java).also { it.putAlarmKeyExtra(alarmId) },
+            Intent(application, AlarmReceiver::class.java).also { it.putAlarmIdExtra(alarmId) },
             PendingIntent.FLAG_CANCEL_CURRENT
         )
 

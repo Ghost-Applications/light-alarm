@@ -15,4 +15,7 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="alarm_removed">Alarm Removed</string>
     <string name="undo">Undo</string>
+    <string name="alarm_off">Alarm Off</string>
+    <string name="snooze_alarm">Snooze Alarm</string>
+    <string name="swipe_up_or_down">Swipe up or down</string>
 </resources>

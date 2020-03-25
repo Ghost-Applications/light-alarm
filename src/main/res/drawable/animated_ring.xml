@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="120dp"
+            android:height="120dp"
+            android:viewportWidth="120"
+            android:viewportHeight="120">
+            <path
+                android:name="root"
+                android:pathData="M60,60m-54.375,0a54.375,54.375 0,1 1,108.75 0a54.375,54.375 0,1 1,-108.75 0"
+                android:strokeWidth="9.0"
+                android:fillColor="#00000000"
+                android:strokeColor="@color/colorPrimary"
+                />
+        </vector>
+
+    </aapt:attr>
+    <target android:name="root">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="strokeColor"
+                android:duration="1000"
+                android:valueFrom="@color/colorPrimary"
+                android:valueTo="@color/colorPrimaryDark"
+                android:repeatMode="reverse"
+                android:repeatCount="infinite"
+                />
+        </aapt:attr>
+    </target>
+    <target android:name="root">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="strokeWidth"
+                android:duration="1000"
+                android:valueFrom="9.0"
+                android:valueTo="6.0"
+                android:repeatMode="reverse"
+                android:repeatCount="infinite"
+                />
+        </aapt:attr>
+    </target>
+</animated-vector>
+
+<!--<animated-vector-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:aapt="http://schemas.android.com/aapt">-->
+<!--    <aapt:attr name="android:drawable">-->
+<!--        <vector-->
+<!--            android:width="24dp"-->
+<!--            android:height="24dp"-->
+<!--            android:viewportWidth="24"-->
+<!--            android:viewportHeight="24">-->
+<!--            <path-->
+<!--                android:name="root"-->
+<!--                android:strokeWidth="2"-->
+<!--                android:strokeLineCap="square"-->
+<!--                android:strokeColor="?android:colorControlNormal"-->
+<!--                android:pathData="M4.8,13.4 L9,17.6 M10.4,16.2 L19.6,7" />-->
+<!--        </vector>-->
+<!--    </aapt:attr>-->
+<!--    <target android:name="root">-->
+<!--        <aapt:attr name="android:animation">-->
+<!--            <objectAnimator-->
+<!--                android:propertyName="pathData"-->
+<!--                android:valueFrom="M4.8,13.4 L9,17.6 M10.4,16.2 L19.6,7"-->
+<!--                android:valueTo="M6.4,6.4 L17.6,17.6 M6.4,17.6 L17.6,6.4"-->
+<!--                android:duration="300"-->
+<!--                android:interpolator="@android:interpolator/fast_out_slow_in"-->
+<!--                android:valueType="pathType" />-->
+<!--        </aapt:attr>-->
+<!--    </target>-->
+<!--</animated-vector>-->

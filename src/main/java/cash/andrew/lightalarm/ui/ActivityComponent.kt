@@ -18,6 +18,7 @@ annotation class ActivityScope
 interface ActivityComponent {
 
     fun inject(activity: MainActivity)
+    fun inject(activity: AlarmActivity)
     fun inject(alarmListItemView: AlarmListItemView)
 
     @Subcomponent.Builder
