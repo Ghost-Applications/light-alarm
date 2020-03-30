@@ -74,6 +74,7 @@ abstract class LightService : Service(), CoroutineScope by MainScope() {
     abstract suspend fun start()
 
     final override fun onDestroy() {
+        lightController.turnOff()
         job?.cancel()
     }
 

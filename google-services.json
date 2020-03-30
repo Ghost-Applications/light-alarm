@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1065298659340",
+    "firebase_url": "https://light-alarm-929f5.firebaseio.com",
+    "project_id": "light-alarm-929f5",
+    "storage_bucket": "light-alarm-929f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065298659340:android:3b391ce512435632668629",
+        "android_client_info": {
+          "package_name": "cash.andrew.lightalarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065298659340-kg2gne1uccodc7umvh1hhpgovrvaqqh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6RBR_N_8U3Wat2uQzu2xY4LSI4Yro3Bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065298659340-kg2gne1uccodc7umvh1hhpgovrvaqqh4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065298659340:android:1fe7535f6f7674ce668629",
+        "android_client_info": {
+          "package_name": "cash.andrew.lightalarm.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065298659340-kg2gne1uccodc7umvh1hhpgovrvaqqh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6RBR_N_8U3Wat2uQzu2xY4LSI4Yro3Bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065298659340-kg2gne1uccodc7umvh1hhpgovrvaqqh4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

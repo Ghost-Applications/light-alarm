@@ -9,7 +9,7 @@ import timber.log.Timber.DebugTree
 
 const val ALARM_CHANNEL_ID = "Alarm"
 
-class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
+open class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
 
     private lateinit var _component: AlarmAppComponent
     override val component: AlarmAppComponent by lazy { _component }
@@ -21,7 +21,7 @@ class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
             .application(this)
             .build()
 
-        Timber.plant(DebugTree())
+        setup()
 
         Paper.init(this)
 
@@ -29,4 +29,7 @@ class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
             NotificationChannel(ALARM_CHANNEL_ID, "Alarm", NotificationManager.IMPORTANCE_HIGH)
         )
     }
+
+    // override in build specific settings to set things up
+    open fun setup() = Unit
 }

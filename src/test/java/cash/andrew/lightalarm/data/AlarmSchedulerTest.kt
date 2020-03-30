@@ -133,17 +133,4 @@ class AlarmSchedulerTest {
 
         assertThat(resultId).isEqualTo(expectedId)
     }
-
-    @Test
-    fun `looking into schedule bug`() {
-        val alarms = listOf(
-            Alarm(
-                enabled = true,
-                days = EnumSet.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY),
-                repeat = false,
-                strobe = true,
-                time = LocalTime.of(6, 0)
-            )
-        )
-    }
 }
