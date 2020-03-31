@@ -28,6 +28,12 @@ class AlarmReceiver : BroadcastReceiver() {
         val id = intent.alarmIdExtra
         val alarm = alarmKeeper.getAlarmById(id)!!
 
+        // if alarm doesn't repeat disable it
+        // so it doesn't go off again tomorrow.
+        if (!alarm.repeat) {
+            alarmKeeper.updateAlarm(alarm.copy(enabled = false))
+        }
+
         alarmScheduler.scheduleNextAlarm()
 
         if (alarm.strobe) {
@@ -36,22 +42,5 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         context.startLightService(id)
-
-//        val activityIntent = Intent(context, AlarmActivity::class.java)
-//        val operation = PendingIntent.getActivity(
-//            context,
-//            PENDING_INTENT_ID,
-//                activityIntent,
-//            PendingIntent.FLAG_CANCEL_CURRENT
-//        )
-//
-//        val notification = Notification.Builder(context, ALARM_CHANNEL_ID)
-//            .setFullScreenIntent(operation, true)
-//            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-//            .setContentTitle("Light Alarm!") // todo
-//            .build()
-//
-//        context.getSystemService<NotificationManager>()!!
-//            .notify(NOTIFICATION_ID, notification)
     }
 }
