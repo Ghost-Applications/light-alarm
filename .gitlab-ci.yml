@@ -31,7 +31,7 @@ before_script:
   - echo $PUBLISH_KEY > keys/publish-key.json
 
   - export GRADLE_USER_HOME=`pwd`/.gradle
-  - export MN_TRAIL_INFO_BUILD_NUMBER=$((CI_JOB_ID - 99347792))
+  - export LIGHT_ALARM_BUILD_NUMBER=$CI_JOB_ID
 
 stages:
   - build
@@ -42,7 +42,7 @@ build:
   only:
     - branches
   script:
-    - ./gradlew build lintProductionRelease -PrunLint=true --no-daemon
+    - ./gradlew build lintRelease --no-daemon
   artifacts:
     paths:
       - build/outputs/
@@ -50,6 +50,6 @@ build:
 masterBuild:
   stage: deploy
   script:
-    - ./gradlew publishApkProductionRelease --no-daemon
+    - ./gradlew publishApkRelease --no-daemon
   only:
     - master
