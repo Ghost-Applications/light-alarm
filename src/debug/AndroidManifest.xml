@@ -6,6 +6,21 @@
     <application
         android:name=".DebugAlarmApp"
         tools:replace="android:name"
-        />
+        >
+
+        <activity
+            android:name=".ui.AlarmActivity"
+            android:label="@string/title_activity_alarm"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

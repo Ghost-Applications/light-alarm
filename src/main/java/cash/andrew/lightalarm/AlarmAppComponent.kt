@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
+import android.os.Vibrator
 import android.text.format.DateFormat
 import androidx.core.content.getSystemService
 import cash.andrew.lightalarm.data.DataModule
@@ -52,7 +53,7 @@ object AlarmAppModule {
 
     @Provides
     @Singleton
-    fun provideNotificationManager(application: Application): NotificationManager = application.getSystemService()!!
+    fun provideNotificationManager(application: Application): NotificationManager = requireNotNull(application.getSystemService())
 
     @Provides
     @Singleton
@@ -60,11 +61,11 @@ object AlarmAppModule {
 
     @Provides
     @Singleton
-    fun provideAlarmManager(application: Application): AlarmManager = application.getSystemService()!!
+    fun provideAlarmManager(application: Application): AlarmManager = requireNotNull(application.getSystemService())
 
     @Provides
     @Singleton
-    fun provideCameraManager(app: Application): CameraManager = app.getSystemService()!!
+    fun provideCameraManager(app: Application): CameraManager = requireNotNull(app.getSystemService())
 
     @Provides
     @Singleton
@@ -77,4 +78,8 @@ object AlarmAppModule {
     @Provides
     @Singleton
     fun provideDateTimeFormatter(app: Application): java.text.DateFormat = DateFormat.getTimeFormat(app)
+
+    @Provides
+    @Singleton
+    fun provideVibrator(app: Application): Vibrator = requireNotNull(app.getSystemService())
 }

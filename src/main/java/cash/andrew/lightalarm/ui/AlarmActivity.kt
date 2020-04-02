@@ -3,6 +3,8 @@ package cash.andrew.lightalarm.ui
 import android.annotation.SuppressLint
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.MotionEvent
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +18,14 @@ import cash.andrew.lightalarm.service.stopStrobeService
 import cash.andrew.lightalarm.databinding.ActivityAlarmBinding
 import cash.andrew.lightalarm.misc.addOnGlobalLayoutListener
 import cash.andrew.lightalarm.misc.alarmIdExtra
+import timber.log.Timber
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
 
     @Inject lateinit var alarmScheduler: AlarmScheduler
+    @Inject lateinit var vibrator: Vibrator
 
     private lateinit var binding: ActivityAlarmBinding
 
@@ -65,10 +69,14 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
         alarmSlider.setOnTouchListener { view, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    Timber.d("Action down")
                     dy = view.y - event.rawY
                     springAnimation.cancel()
+
+                    vibrate()
                 }
                 MotionEvent.ACTION_MOVE -> {
+                    Timber.d("Action move")
                     val sliderCenter = alarmSlider.y + (alarmSlider.height.toFloat() / 2f)
 
                     if (sliderCenter >= alarmSnoozeCenterY) {
@@ -87,6 +95,7 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
                         .start()
                 }
                 MotionEvent.ACTION_UP -> {
+                    Timber.d("Action up")
                     springAnimation.start()
                 }
             }
@@ -95,9 +104,14 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
     }
 
     private fun shutdown() {
+        vibrate()
         stopLightService()
         stopStrobeService()
         overridePendingTransition(0, android.R.anim.fade_out)
         finish()
+    }
+
+    private fun vibrate() {
+        vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.EFFECT_TICK))
     }
 }
