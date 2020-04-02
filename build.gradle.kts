@@ -6,8 +6,16 @@ plugins {
     id("com.google.gms.google-services") version "4.3.3"
     id("com.google.firebase.crashlytics") version "2.0.0-beta03"
     id("com.github.ben-manes.versions") version "0.28.0"
+    id("com.github.triplet.play") version "2.2.0"
     id("build-number")
     id("android-signing-config")
+}
+
+play {
+    serviceAccountCredentials = file(properties["cash.andrew.mntrail.publishKey"]
+        ?: "keys/publish-key.json")
+    track = "internal"
+    defaultToAppBundles = true
 }
 
 repositories {
