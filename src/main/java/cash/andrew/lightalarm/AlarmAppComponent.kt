@@ -14,6 +14,7 @@ import cash.andrew.lightalarm.service.LightService
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.reciever.AlarmBootReceiver
 import cash.andrew.lightalarm.ui.ActivityComponent
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -38,6 +39,7 @@ interface AlarmAppComponent {
 
     val activityComponentBuilder: ActivityComponent.Builder
     val notificationManager: NotificationManager
+    val firebaseCrashlytics: FirebaseCrashlytics
 
     @Component.Builder
     interface Builder {
@@ -82,4 +84,8 @@ object AlarmAppModule {
     @Provides
     @Singleton
     fun provideVibrator(app: Application): Vibrator = requireNotNull(app.getSystemService())
+
+    @Provides
+    @Singleton
+    fun provideCrashlytics(): FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
 }
