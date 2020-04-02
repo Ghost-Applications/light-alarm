@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
     @Inject lateinit var alarmKeeper: AlarmKeeper
     @Inject lateinit var alarmAdapter: AlarmRecyclerAdapter
     @Inject lateinit var alarmScheduler: AlarmScheduler
+    @Inject lateinit var lightController: LightController
 
     private lateinit var binding: ActivityMainBinding
 
@@ -42,6 +43,12 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
 
         setSupportActionBar(binding.toolbar)
         component.inject(this)
+
+        if (!lightController.hasFlashLight) {
+            binding.mainActivityContainer.displayedChildId = binding.mainNoLights.id
+            binding.fab.hide()
+            return
+        }
 
         showAlarmList()
 
