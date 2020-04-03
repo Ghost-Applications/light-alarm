@@ -2,11 +2,13 @@ package cash.andrew.lightalarm.ui
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Animatable
+import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.MotionEvent
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
@@ -24,8 +26,10 @@ import javax.inject.Inject
 
 class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
 
-    @Inject lateinit var alarmScheduler: AlarmScheduler
-    @Inject lateinit var vibrator: Vibrator
+    @Inject
+    lateinit var alarmScheduler: AlarmScheduler
+    @Inject
+    lateinit var vibrator: Vibrator
 
     private lateinit var binding: ActivityAlarmBinding
 
@@ -111,7 +115,14 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
         finish()
     }
 
+    @SuppressLint("NewApi")
     private fun vibrate() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(75)
+            return
+        }
+
         VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK).let {
             vibrator.vibrate(it)
         }

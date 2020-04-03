@@ -93,8 +93,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
 
-    implementation("com.google.firebase:firebase-analytics:17.2.3")
-    implementation("com.google.firebase:firebase-crashlytics:17.0.0-beta02")
+    implementation("com.google.firebase:firebase-analytics:17.3.0")
+    implementation("com.google.firebase:firebase-crashlytics:17.0.0-beta03")
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("com.google.dagger:dagger:2.27")

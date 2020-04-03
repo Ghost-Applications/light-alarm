@@ -17,6 +17,6 @@ extra["storeKeyAlias"] = when {
 }
 
 extra["keystoreLocation"] = when {
-    hasProperty("cash.andrew.lightalarm.keystoreLocation") -> properties["cash.andrew.lightalarm.keystoreLocation"]
+    project.hasProperty("cash.andrew.lightalarm.keystoreLocation") -> properties["cash.andrew.lightalarm.keystoreLocation"]
     else -> System.getenv("LIGHT_ALARM_KEYSTORE_LOCATION") ?: "keys/debug.keystore"
 }
