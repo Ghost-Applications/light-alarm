@@ -112,6 +112,8 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
     }
 
     private fun vibrate() {
-        vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.EFFECT_TICK))
+        VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK).let {
+            vibrator.vibrate(it)
+        }
     }
 }
