@@ -1,7 +1,9 @@
 package cash.andrew.lightalarm
 
-import android.app.*
+import android.app.Application
+import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
 import cash.andrew.lightalarm.data.Alarm
@@ -31,6 +33,7 @@ class NotificationManager @Inject constructor(
 
     fun alarmNotification(alarm: Alarm): Notification {
         val activityIntent = Intent(context, AlarmActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             putAlarmIdExtra(alarm.id)
         }
 

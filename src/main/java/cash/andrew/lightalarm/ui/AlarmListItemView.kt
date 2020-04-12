@@ -55,6 +55,8 @@ class AlarmListItemView(
         Timber.d("bind() called alarm = %s", alarm)
 
         val currentAlarm = {
+            // return a default alarm if an alarm has been
+            // added quickly after an alarm has been swiped away.
             alarmKeeper.getAlarmById(alarm.id) ?: Alarm(
                 id = alarm.id,
                 time = LocalTime.now()
