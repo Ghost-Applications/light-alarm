@@ -18,7 +18,7 @@ class RegularLightService : LightService() {
 }
 
 fun Context.startLightService(alarmId: UUID) {
-    val intent = Intent(this, RegularLightService::class.java).apply {
+    val intent = lightServiceIntent.apply {
         action = LightService.LightServiceAction.START.name
         putAlarmIdExtra(alarmId)
     }
@@ -26,8 +26,11 @@ fun Context.startLightService(alarmId: UUID) {
 }
 
 fun Context.stopLightService() {
-    val intent = Intent(this, RegularLightService::class.java).apply {
-        action = LightService.LightServiceAction.STOP.name
-    }
-    startForegroundService(intent)
+    startService(stopLightServiceIntent)
 }
+
+private val Context.stopLightServiceIntent get() = lightServiceIntent.apply {
+    action = LightService.LightServiceAction.STOP.name
+}
+
+private val Context.lightServiceIntent get() = Intent(this, RegularLightService::class.java)

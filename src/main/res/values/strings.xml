@@ -19,4 +19,6 @@
     <string name="snooze_alarm">Snooze Alarm</string>
     <string name="swipe_up_or_down">Swipe up or down</string>
     <string name="no_lights">Your device doesn\'t seem to have any flashlights. Unfortunately this app won\'t work without flashlights.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="snooze">Snooze</string>
 </resources>

@@ -1,22 +1,20 @@
 package cash.andrew.lightalarm.service
 
-import android.app.Notification
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import cash.andrew.lightalarm.ALARM_CHANNEL_ID
+import cash.andrew.lightalarm.NotificationManager
 import cash.andrew.lightalarm.alarmAppComponent
+import cash.andrew.lightalarm.data.AlarmKeeper
+import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.data.LightController
 import cash.andrew.lightalarm.misc.alarmIdExtra
-import cash.andrew.lightalarm.misc.putAlarmIdExtra
-import cash.andrew.lightalarm.reciever.NOTIFICATION_ID
-import cash.andrew.lightalarm.reciever.PENDING_INTENT_ID
-import cash.andrew.lightalarm.ui.AlarmActivity
+import cash.andrew.lightalarm.NotificationManager.Companion.ALARM_NOTIFICATION_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 abstract class LightService : Service(), CoroutineScope by MainScope() {
@@ -28,43 +26,26 @@ abstract class LightService : Service(), CoroutineScope by MainScope() {
     }
 
     @Inject lateinit var lightController: LightController
+    @Inject lateinit var alarmKeeper: AlarmKeeper
+    @Inject lateinit var notificationManager: NotificationManager
+    @Inject lateinit var alarmScheduler: AlarmScheduler
 
     private var job: Job? = null
 
     final override fun onCreate() {
-        alarmAppComponent.inject(this)
+        alarmAppComponent.lightServiceComponent.inject(this)
     }
 
     final override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.lightServiceAction == LightServiceAction.STOP) {
-            job?.let {
-                it.cancel()
-                job = null
-                stopSelf()
-            }
+            stop()
             return START_REDELIVER_INTENT
         }
 
-        val activityIntent = Intent(this, AlarmActivity::class.java).apply {
-            putAlarmIdExtra(intent.alarmIdExtra)
-        }
-
-        val operation = PendingIntent.getActivity(
-            this,
-            PENDING_INTENT_ID,
-            activityIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        )
-
-        val notification = Notification.Builder(this, ALARM_CHANNEL_ID)
-            .setFullScreenIntent(operation, true)
-            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-            .setContentTitle("Light Alarm!") // todo
-            .build()
-
-        startForeground(NOTIFICATION_ID, notification)
+        val alarm = requireNotNull(alarmKeeper.getAlarmById(intent.alarmIdExtra))
+        startForeground(ALARM_NOTIFICATION_ID, notificationManager.alarmNotification(alarm))
 
         job = launch { start() }
 
@@ -78,4 +59,11 @@ abstract class LightService : Service(), CoroutineScope by MainScope() {
         job?.cancel()
     }
 
+    private fun stop() {
+        job?.let {
+            it.cancel()
+            job = null
+            stopSelf()
+        }
+    }
 }

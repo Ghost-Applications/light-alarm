@@ -1,35 +1,35 @@
 package cash.andrew.lightalarm.ui
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.MotionEvent
+import android.view.WindowManager
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.data.AlarmScheduler
-import cash.andrew.lightalarm.service.stopLightService
-import cash.andrew.lightalarm.service.stopStrobeService
 import cash.andrew.lightalarm.databinding.ActivityAlarmBinding
 import cash.andrew.lightalarm.misc.addOnGlobalLayoutListener
 import cash.andrew.lightalarm.misc.alarmIdExtra
+import cash.andrew.lightalarm.service.stopLightService
+import cash.andrew.lightalarm.service.stopStrobeService
 import timber.log.Timber
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
 
-    @Inject
-    lateinit var alarmScheduler: AlarmScheduler
-    @Inject
-    lateinit var vibrator: Vibrator
+    @Inject lateinit var alarmScheduler: AlarmScheduler
+    @Inject lateinit var vibrator: Vibrator
+    @Inject lateinit var keyguardManager: KeyguardManager
 
     private lateinit var binding: ActivityAlarmBinding
 
@@ -40,6 +40,8 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
         super.onCreate(savedInstanceState)
 
         component.inject(this)
+
+        showOverLockScreen()
 
         binding = ActivityAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -107,6 +109,24 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
         }
     }
 
+    private fun showOverLockScreen() {
+        if (Build.VERSION.SDK_INT < 27) {
+            @Suppress("DEPRECATION")
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
+            return
+        }
+
+        setShowWhenLocked(true)
+        setTurnScreenOn(true)
+        keyguardManager.requestDismissKeyguard(this, null)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
     private fun shutdown() {
         vibrate()
         stopLightService()
@@ -115,9 +135,8 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
         finish()
     }
 
-    @SuppressLint("NewApi")
     private fun vibrate() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < 29) {
             @Suppress("DEPRECATION")
             vibrator.vibrate(75)
             return

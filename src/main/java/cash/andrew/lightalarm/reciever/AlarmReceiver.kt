@@ -11,9 +11,6 @@ import cash.andrew.lightalarm.service.startStrobeService
 import timber.log.Timber
 import javax.inject.Inject
 
-const val NOTIFICATION_ID = 3779
-const val PENDING_INTENT_ID = 7589
-
 class AlarmReceiver : BroadcastReceiver() {
 
     @Inject lateinit var alarmKeeper: AlarmKeeper
