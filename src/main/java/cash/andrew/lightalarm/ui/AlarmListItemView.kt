@@ -19,6 +19,7 @@ import java.time.DayOfWeek.SUNDAY
 import java.time.DayOfWeek.THURSDAY
 import java.time.DayOfWeek.TUESDAY
 import java.time.DayOfWeek.WEDNESDAY
+import java.time.LocalTime
 import java.time.ZonedDateTime
 import java.util.Date
 import javax.inject.Inject
@@ -54,8 +55,10 @@ class AlarmListItemView(
         Timber.d("bind() called alarm = %s", alarm)
 
         val currentAlarm = {
-            Timber.d("currentAlarm() alarm = %s, saved alarms = %s", alarm.id, alarmKeeper.alarms.map { it.id })
-            requireNotNull(alarmKeeper.getAlarmById(alarm.id))
+            alarmKeeper.getAlarmById(alarm.id) ?: Alarm(
+                id = alarm.id,
+                time = LocalTime.now()
+            ).also { Timber.w("alarm with id %s not found, using default", alarm.id) }
         }
 
         alarm.setupViewWithAlarmData()
