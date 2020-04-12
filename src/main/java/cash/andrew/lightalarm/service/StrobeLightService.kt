@@ -15,13 +15,13 @@ class StrobeLightService : LightService() {
             } else {
                 lightController.turnOn()
             }
-            delay(1000) // todo setting?
+            delay(1000)
         }
     }
 }
 
 fun Context.startStrobeService(alarmId: UUID) {
-    val intent = Intent(this, StrobeLightService::class.java).apply {
+    val intent = strobeLightServiceIntent.apply {
         action = LightService.LightServiceAction.START.name
         putAlarmIdExtra(alarmId)
     }
@@ -29,8 +29,11 @@ fun Context.startStrobeService(alarmId: UUID) {
 }
 
 fun Context.stopStrobeService() {
-    val intent = Intent(this, StrobeLightService::class.java).apply {
-        action = LightService.LightServiceAction.STOP.name
-    }
-    startForegroundService(intent)
+    startService(stopStrobeStrobeServiceIntent)
 }
+
+private val Context.stopStrobeStrobeServiceIntent get() = strobeLightServiceIntent.apply {
+    action = LightService.LightServiceAction.STOP.name
+}
+
+private val Context.strobeLightServiceIntent get() = Intent(this, StrobeLightService::class.java)

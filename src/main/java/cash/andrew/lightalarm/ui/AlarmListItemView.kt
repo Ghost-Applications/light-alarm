@@ -5,10 +5,12 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import cash.andrew.lightalarm.data.Alarm
+import cash.andrew.lightalarm.data.AlarmDateTimeFormatter
 import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.databinding.AlarmListItemViewBinding
 import cash.andrew.lightalarm.misc.toEnumSet
+import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.DayOfWeek.FRIDAY
 import java.time.DayOfWeek.MONDAY
@@ -29,6 +31,7 @@ class AlarmListItemView(
     @Inject lateinit var dateFormat: java.text.DateFormat
     @Inject lateinit var alarmKeeper: AlarmKeeper
     @Inject lateinit var alarmScheduler: AlarmScheduler
+    @Inject lateinit var alarmDateTimeFormatter: AlarmDateTimeFormatter
 
     private val dayViews
         get() = listOf(
@@ -48,7 +51,13 @@ class AlarmListItemView(
     }
 
     fun bind(alarm: Alarm) {
-        val currentAlarm = { alarmKeeper.getAlarmById(alarm.id)!! }
+        Timber.d("bind() called alarm = %s", alarm)
+
+        val currentAlarm = {
+            Timber.d("currentAlarm() alarm = %s, saved alarms = %s", alarm.id, alarmKeeper.alarms.map { it.id })
+            requireNotNull(alarmKeeper.getAlarmById(alarm.id))
+        }
+
         alarm.setupViewWithAlarmData()
 
         binding.enableAlarmSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -95,9 +104,7 @@ class AlarmListItemView(
     }
 
     private fun Alarm.setupViewWithAlarmData() {
-        binding.alarmText.text = dateFormat.format(
-            Date.from(ZonedDateTime.now().withHour(time.hour).withMinute(time.minute).toInstant())
-        )
+        binding.alarmText.text = alarmDateTimeFormatter.formatAlarmTime(this)
         binding.enableAlarmSwitch.isChecked = enabled
 
         binding.strobeCheckbox.isChecked = strobe

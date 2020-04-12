@@ -2,6 +2,7 @@ package cash.andrew.lightalarm
 
 import android.app.AlarmManager
 import android.app.Application
+import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,9 +11,9 @@ import android.os.Vibrator
 import android.text.format.DateFormat
 import androidx.core.content.getSystemService
 import cash.andrew.lightalarm.data.DataModule
-import cash.andrew.lightalarm.service.LightService
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.reciever.AlarmBootReceiver
+import cash.andrew.lightalarm.service.LightServiceComponent
 import cash.andrew.lightalarm.ui.ActivityComponent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.BindsInstance
@@ -32,12 +33,11 @@ val Context.alarmAppComponent: AlarmAppComponent get() = (applicationContext as 
 @Singleton
 @Component(modules = [AlarmAppModule::class, DataModule::class])
 interface AlarmAppComponent {
-
-    fun inject(lightService: LightService)
     fun inject(alarmReceiver: AlarmReceiver)
     fun inject(bootReceiver: AlarmBootReceiver)
 
     val activityComponentBuilder: ActivityComponent.Builder
+    val lightServiceComponent: LightServiceComponent
     val notificationManager: NotificationManager
     val firebaseCrashlytics: FirebaseCrashlytics
 
@@ -64,6 +64,10 @@ object AlarmAppModule {
     @Provides
     @Singleton
     fun provideAlarmManager(application: Application): AlarmManager = requireNotNull(application.getSystemService())
+
+    @Provides
+    @Singleton
+    fun provideKeyGaurdManager(app: Application): KeyguardManager = requireNotNull(app.getSystemService())
 
     @Provides
     @Singleton

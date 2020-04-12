@@ -1,10 +1,7 @@
 package cash.andrew.lightalarm.ui
 
 import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
@@ -12,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cash.andrew.lightalarm.ALARM_CHANNEL_ID
+import cash.andrew.lightalarm.BuildConfig
 import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.R
 import cash.andrew.lightalarm.data.*
 import cash.andrew.lightalarm.databinding.ActivityMainBinding
-import cash.andrew.lightalarm.reciever.PENDING_INTENT_ID
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalTime
 import javax.inject.Inject
@@ -44,7 +40,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         setSupportActionBar(binding.toolbar)
         component.inject(this)
 
-        if (!lightController.hasFlashLight) {
+        if (!lightController.hasFlashLight && !BuildConfig.DEBUG) {
             binding.mainActivityContainer.displayedChildId = binding.mainNoLights.id
             binding.fab.hide()
             return
@@ -65,6 +61,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(binding.alarmsList)
 
         binding.fab.debounceClickListener {
+            val localTime = LocalTime.now()
             TimePickerDialog(this, { _, hour, minute ->
 
                 val alarm = Alarm(
@@ -72,14 +69,12 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
                 )
 
                 alarmKeeper.addAlarm(alarm)
-                alarmAdapter.addAlarm(alarm)
-
-                // un-schedule and reschedule alarms
                 alarmScheduler.scheduleNextAlarm()
+                alarmAdapter.addAlarm(alarm)
 
                 showAlarmList()
 
-            }, 12, 0, DateFormat.is24HourFormat(this)).show()
+            }, localTime.hour, localTime.minute, DateFormat.is24HourFormat(this)).show()
         }
     }
 

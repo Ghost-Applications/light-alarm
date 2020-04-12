@@ -5,8 +5,11 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import cash.andrew.lightalarm.AlarmApp
 import cash.andrew.lightalarm.ComponentContainer
+import cash.andrew.lightalarm.RiseAndShine
+import cash.andrew.lightalarm.RiseAndShineModule
 import dagger.BindsInstance
 import dagger.Module
+import dagger.Provides
 import dagger.Subcomponent
 import javax.inject.Scope
 
@@ -20,6 +23,8 @@ interface ActivityComponent {
     fun inject(activity: MainActivity)
     fun inject(activity: AlarmActivity)
     fun inject(alarmListItemView: AlarmListItemView)
+
+    val riseAndShine: RiseAndShine
 
     @Subcomponent.Builder
     interface Builder {
@@ -36,12 +41,13 @@ fun <T> T.makeComponent():
     .activityComponentBuilder
     .activity(this)
     .build()
+    .also {
+        it.riseAndShine.riseAndShine()
+    }
 
 @Suppress("UNCHECKED_CAST")
 val Context.activityComponent
     get() = (this as ComponentContainer<ActivityComponent>).component
 
-@Module
-object ActivityModule {
-}
-
+@Module(includes = [RiseAndShineModule::class])
+object ActivityModule
