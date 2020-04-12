@@ -12,8 +12,7 @@ plugins {
 }
 
 play {
-    serviceAccountCredentials = file(properties["cash.andrew.mntrail.publishKey"]
-        ?: "keys/publish-key.json")
+    serviceAccountCredentials = file(properties["cash.andrew.mntrail.publishKey"] ?: "keys/publish-key.json")
     track = "internal"
 }
 
@@ -34,7 +33,7 @@ android {
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "🍉💩"
+        versionName = "🍊🤡"
     }
 
     signingConfigs {
