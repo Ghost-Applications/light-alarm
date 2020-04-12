@@ -50,6 +50,6 @@ build:
 masterBuild:
   stage: deploy
   script:
-    - ./gradlew publish --no-daemon
+    - ./gradlew publishReleaseBundle --no-daemon
   only:
     - master
