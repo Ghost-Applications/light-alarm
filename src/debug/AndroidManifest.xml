@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".NotificationTestActivity"
+            android:name=".TestActivity"
             android:label="Alarm Tests"
             android:theme="@style/AppTheme.NoActionBar"
             >
