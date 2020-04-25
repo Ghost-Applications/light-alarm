@@ -4,7 +4,7 @@ plugins {
     id("kotlin-android") version kotlinVersion
     id("kotlin-kapt") version kotlinVersion
     id("com.google.gms.google-services") version "4.3.3"
-    id("com.google.firebase.crashlytics") version "2.0.0-beta04"
+    id("com.google.firebase.crashlytics") version "2.0.0"
     id("com.github.ben-manes.versions") version "0.28.0"
     id("com.github.triplet.play") version "2.7.5"
     id("build-number")
@@ -12,7 +12,7 @@ plugins {
 }
 
 play {
-    serviceAccountCredentials = file(properties["cash.andrew.mntrail.publishKey"] ?: "keys/publish-key.json")
+    serviceAccountCredentials = file(properties["cash.andrew.lightalarm.publishKey"] ?: "keys/publish-key.json")
     track = "internal"
 }
 
@@ -33,7 +33,7 @@ android {
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "二"
+        versionName = "三"
     }
 
     signingConfigs {
@@ -92,8 +92,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
 
-    implementation("com.google.firebase:firebase-analytics:17.3.0")
-    implementation("com.google.firebase:firebase-crashlytics:17.0.0-beta04")
+    implementation("com.google.firebase:firebase-analytics:17.4.0")
+    implementation("com.google.firebase:firebase-crashlytics:17.0.0")
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("com.google.dagger:dagger:2.27")
