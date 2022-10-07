@@ -13,7 +13,8 @@
             android:label="@string/title_activity_alarm"
             android:screenOrientation="userPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="LockedOrientationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -26,7 +27,7 @@
             android:name=".TestActivity"
             android:label="Alarm Tests"
             android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

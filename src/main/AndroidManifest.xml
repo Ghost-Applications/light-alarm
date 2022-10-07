@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        >
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        tools:targetApi="s">
 
         <service
             android:name=".service.StrobeLightService"
@@ -46,7 +47,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleInstance"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
