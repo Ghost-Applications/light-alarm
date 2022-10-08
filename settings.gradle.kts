@@ -1,35 +1,25 @@
-rootProject.name = "Light Alarm"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+rootProject.name = "light-alarm"
 
 pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        jcenter()
     }
+}
 
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id in arrayOf("kotlin-android", "kotlin-kapt", "kotlin-android-extensions")) {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-
-            if (requested.id.id == "com.android.application") {
-                useModule("com.android.tools.build:gradle:${requested.version}")
-            }
-
-            if (requested.id.id == "com.google.gms.google-services") {
-                useModule("com.google.gms:google-services:${requested.version}")
-            }
-
-            if (requested.id.id == "com.google.firebase.crashlytics") {
-                useModule("com.google.firebase:firebase-crashlytics-gradle:${requested.version}")
-            }
-        }
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // can be removed when paperDB is removed
+        jcenter()
     }
 }
 
 plugins {
-    id("com.gradle.enterprise").version("3.1.1")
+    id("com.gradle.enterprise").version("3.8.1")
 }
 
 gradleEnterprise {

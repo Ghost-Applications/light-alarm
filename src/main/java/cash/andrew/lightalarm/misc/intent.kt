@@ -9,4 +9,5 @@ fun Intent.putAlarmIdExtra(id: UUID) {
     putExtra(ALARM_ID_KEY, id)
 }
 
+@Suppress("DEPRECATION")
 val Intent.alarmIdExtra: UUID get() = getSerializableExtra(ALARM_ID_KEY) as UUID

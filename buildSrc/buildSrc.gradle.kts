@@ -1,7 +1,8 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.version.check)
 }
 
-repositories {
-    jcenter()
+dependencies {
+    implementation(libs.bundles.buildSrc)
 }

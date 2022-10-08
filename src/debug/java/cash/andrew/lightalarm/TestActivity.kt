@@ -5,8 +5,8 @@ import android.os.Bundle
 import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.databinding.ActivityNotificationTestBinding
 import java.time.LocalTime
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 class TestActivity: Activity() {
 
@@ -25,7 +25,7 @@ class TestActivity: Activity() {
         binding.testAlarmNotification.setOnClickListener {
             it.postDelayed({
                 notificationManager.showAlarmNotification(Alarm(time = LocalTime.now()))
-            }, 3.seconds.toLongMilliseconds())
+            }, 3.seconds.inWholeMilliseconds)
         }
 
         binding.testCrash.setOnClickListener {

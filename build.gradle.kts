@@ -1,39 +1,36 @@
 plugins {
-    val kotlinVersion = "1.3.71"
-    id("com.android.application") version "3.6.2"
-    id("kotlin-android") version kotlinVersion
-    id("kotlin-kapt") version kotlinVersion
-    id("com.google.gms.google-services") version "4.3.3"
-    id("com.google.firebase.crashlytics") version "2.0.0"
-    id("com.github.ben-manes.versions") version "0.28.0"
-    id("com.github.triplet.play") version "2.7.5"
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
+
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.play.publisher)
+
     id("build-number")
     id("android-signing-config")
 }
 
 play {
-    serviceAccountCredentials = file(properties["cash.andrew.lightalarm.publishKey"] ?: "keys/publish-key.json")
-    track = "internal"
-}
-
-repositories {
-    google()
-    mavenCentral()
-    jcenter()
+    serviceAccountCredentials.set(
+        rootProject.file(properties["cash.andrew.lightalarm.publishKey"] ?: "keys/publish-key.json")
+    )
+    track.set("internal")
+    defaultToAppBundles.set(true)
 }
 
 android {
-    compileSdkVersion(29)
-    buildToolsVersion("29.0.3")
+    compileSdk = 33
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "cash.andrew.lightalarm"
-        minSdkVersion(26)
-        targetSdkVersion(29)
+        minSdk = 26
+        targetSdk = 33
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "三"
+        versionName = "yon"
     }
 
     signingConfigs {
@@ -82,36 +79,46 @@ android {
     viewBinding {
         isEnabled = true
     }
+
+    buildFeatures {
+        viewBinding = true
+        aidl = false
+        buildConfig = true
+        compose = false
+        prefab = false
+        renderScript = false
+        resValues = false
+        shaders = false
+    }
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
 
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.core:core-ktx:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
-    implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.dynamicanimation)
 
-    implementation("com.google.firebase:firebase-analytics:17.4.0")
-    implementation("com.google.firebase:firebase-crashlytics:17.0.0")
+    implementation(platform("com.google.firebase:firebase-bom:${libs.versions.firebase.get()}"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
-    implementation("com.google.android.material:material:1.1.0")
-    implementation("com.google.dagger:dagger:2.27")
-    kapt("com.google.dagger:dagger-compiler:2.27")
+    implementation(libs.material)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
 
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation(libs.timber)
 
-    implementation("io.paperdb:paperdb:2.6")
+    implementation(libs.paper)
 
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("com.google.truth:truth:1.0.1")
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.truth)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    targetCompatibility = "1.8"
-    sourceCompatibility = "1.8"
     kotlinOptions.jvmTarget = "1.8"
 }
