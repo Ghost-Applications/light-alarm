@@ -1,7 +1,7 @@
 package cash.andrew.lightalarm.misc
 
 import android.content.Intent
-import java.util.*
+import java.util.UUID
 
 private const val ALARM_ID_KEY = "cash.andrew.lightalarm.reciever.ALARM_ID"
 

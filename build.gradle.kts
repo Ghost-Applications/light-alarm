@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.play.publisher)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.version.check)
 
     id("build-number")
     id("android-signing-config")
@@ -20,6 +22,7 @@ play {
 }
 
 android {
+    namespace = "cash.andrew.lightalarm"
     compileSdk = 33
     buildToolsVersion = "30.0.3"
 
@@ -76,10 +79,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    viewBinding {
-        isEnabled = true
-    }
-
     buildFeatures {
         viewBinding = true
         aidl = false
@@ -114,6 +113,10 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.paper)
+
+    implementation(libs.okio)
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.truth)

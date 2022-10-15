@@ -17,7 +17,7 @@ build:
   only:
     - branches
   script:
-    - ./gradlew build lintRelease --no-daemon --console=plain --stacktrace
+    - ./gradlew build lintRelease --no-daemon --console=plain --stacktrace --info
   artifacts:
     paths:
       - build/outputs/

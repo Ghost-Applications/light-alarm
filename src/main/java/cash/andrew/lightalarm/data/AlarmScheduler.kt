@@ -73,14 +73,14 @@ class AlarmScheduler @Inject constructor(
             application,
             ALARM_EDIT_INTENT_ID,
             Intent(application, MainActivity::class.java),
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val operation = PendingIntent.getBroadcast(
             application,
             ALARM_BROADCAST_RECEIVER_ID,
             Intent(application, AlarmReceiver::class.java).also { it.putAlarmIdExtra(alarmId) },
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         Timber.d("Scheduling alarm at %s", time)
@@ -97,7 +97,7 @@ class AlarmScheduler @Inject constructor(
             application,
             ALARM_BROADCAST_RECEIVER_ID,
             Intent(application, AlarmReceiver::class.java),
-            PendingIntent.FLAG_NO_CREATE
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
 
         if (alarmIntent == null) {

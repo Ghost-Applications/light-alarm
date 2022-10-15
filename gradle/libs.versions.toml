@@ -1,11 +1,12 @@
 [versions]
 kotlin = "1.7.20"
-firebase = "30.0.2"
+firebase = "30.5.0"
 dagger = "2.44"
 coroutines = "1.6.4"
+moshi = "1.14.0"
 
 [libraries]
-android-build-gradle = { module = "com.android.tools.build:gradle", version = "7.2.0"}
+android-build-gradle = { module = "com.android.tools.build:gradle", version = "7.3.0"}
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.5.1" }
@@ -24,6 +25,10 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1"}
 paper = { module = "io.paperdb:paperdb", version = "2.7.1" }
 
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+okio = { module = "com.squareup.okio:okio", version = "3.2.0" }
+
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 truth = { module = "com.google.truth:truth", version = "1.1.3"}
 
@@ -36,5 +41,6 @@ buildSrc = [
 [plugins]
 version-check = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 play-publisher = { id = "com.github.triplet.play", version = "3.7.0"}
-google-services = { id = "com.google.gms.google-services", version = "4.3.10" }
+google-services = { id = "com.google.gms.google-services", version = "4.3.14" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.8.1" }
+ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.6" }
