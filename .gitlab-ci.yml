@@ -25,6 +25,7 @@ build:
 masterBuild:
   stage: deploy
   script:
-    - ./gradlew publishReleaseBundle --no-daemon --console=plain
+    - echo $LIGHT_ALARM_BUILD_NUMBER
+    - ./gradlew publishReleaseBundle --no-daemon --console=plain --stacktrace --info
   only:
     - master
