@@ -10,7 +10,7 @@ before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x ./gradlew
 
-  - export LIGHT_ALARM_BUILD_NUMBER=$CI_PIPELINE_IID
+  - export LIGHT_ALARM_BUILD_NUMBER=$(($CI_PIPELINE_IID + 514056331))
 
 build:
   stage: build
