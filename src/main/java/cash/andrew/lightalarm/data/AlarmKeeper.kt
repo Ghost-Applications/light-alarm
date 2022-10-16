@@ -1,7 +1,11 @@
 package cash.andrew.lightalarm.data
 
+import com.squareup.moshi.JsonAdapter
 import io.paperdb.Book
-import java.util.*
+import okio.buffer
+import okio.sink
+import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +21,19 @@ interface AlarmKeeper {
 }
 
 @Singleton
-class DefaultAlarmKeeper @Inject constructor(private val alarmBook: Book): AlarmKeeper {
+class DefaultAlarmKeeper @Inject constructor(
+    private val alarmBook: Book,
+    private val alarmListJsonAdapter: JsonAdapter<List<Alarm>>,
+    outputFile: File
+): AlarmKeeper {
+
+    init {
+        outputFile.outputStream().use { stream ->
+            stream.sink().buffer().use {
+                alarmListJsonAdapter.toJson(it, alarms)
+            }
+        }
+    }
 
     override fun getAlarmById(id: UUID): Alarm? = alarms.find { it.id == id }
 
