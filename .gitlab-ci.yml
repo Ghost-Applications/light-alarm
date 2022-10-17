@@ -10,14 +10,14 @@ before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x ./gradlew
 
-  - export LIGHT_ALARM_BUILD_NUMBER=$(($CI_PIPELINE_IID + 514056331))
+  - export LIGHT_ALARM_BUILD_NUMBER=$(($CI_PIPELINE_IID + 526711813))
 
 build:
   stage: build
   only:
     - branches
   script:
-    - ./gradlew build lintRelease --no-daemon --console=plain --stacktrace --info
+    - ./gradlew build lintRelease --no-daemon --console=plain
   artifacts:
     paths:
       - build/outputs/
@@ -25,7 +25,6 @@ build:
 masterBuild:
   stage: deploy
   script:
-    - echo $LIGHT_ALARM_BUILD_NUMBER
-    - ./gradlew publishReleaseBundle --no-daemon --console=plain --stacktrace --info
+    - ./gradlew publishReleaseBundle --no-daemon --console=plain
   only:
     - master
