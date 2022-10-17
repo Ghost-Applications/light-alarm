@@ -4,4 +4,4 @@
     int SDK_INT return 21..1000;
 }
 
-
+-keepnames class com.squareup.moshi.JsonWriter, com.squareup.moshi.JsonReader, com.squareup.moshi.JsonAdapter
