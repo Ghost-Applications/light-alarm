@@ -10,7 +10,7 @@ import java.util.EnumSet
 class DayOfWeekEnumSetJsonAdapterTest {
 
     private val adapter = Moshi.Builder()
-        .add(DayOfWeekEnumSetJsonAdapter)
+        .add(DayOfWeekEnumSetJsonAdapter())
         .build()
         .adapter<EnumSet<DayOfWeek>>(Types.newParameterizedType(EnumSet::class.java, DayOfWeek::class.java))
 

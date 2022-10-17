@@ -104,9 +104,9 @@ object AlarmAppModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder()
-        .add(UUIDJsonAdapter)
-        .add(DayOfWeekEnumSetJsonAdapter)
-        .add(LocalTimeJsonAdapter)
+        .add(UUIDJsonAdapter())
+        .add(DayOfWeekEnumSetJsonAdapter())
+        .add(LocalTimeJsonAdapter())
         .build()
 
     @Provides

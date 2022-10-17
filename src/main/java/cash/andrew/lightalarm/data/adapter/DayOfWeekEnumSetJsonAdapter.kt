@@ -8,7 +8,7 @@ import com.squareup.moshi.ToJson
 import java.time.DayOfWeek
 import java.util.EnumSet
 
-object DayOfWeekEnumSetJsonAdapter {
+class DayOfWeekEnumSetJsonAdapter {
     @ToJson
     fun toJson(jsonWriter: JsonWriter, value: EnumSet<DayOfWeek>?, jsonAdapter: JsonAdapter<Set<DayOfWeek>>) {
         jsonAdapter.toJson(jsonWriter, value as Set<DayOfWeek>)
