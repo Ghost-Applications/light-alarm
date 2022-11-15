@@ -41,7 +41,7 @@ class NotificationManager @Inject constructor(
             context,
             ALARM_NOTIFICATION_PENDING_INTENT_ID,
             activityIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return Notification.Builder(context, ALARM_CHANNEL_ID)

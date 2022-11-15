@@ -60,8 +60,12 @@ android {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
@@ -113,10 +117,6 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.paper)
-
-    implementation(libs.okio)
-    implementation(libs.moshi)
-    ksp(libs.moshi.codegen)
 
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.truth)
