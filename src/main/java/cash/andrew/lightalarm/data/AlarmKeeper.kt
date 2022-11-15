@@ -1,10 +1,6 @@
 package cash.andrew.lightalarm.data
 
-import com.squareup.moshi.JsonAdapter
 import io.paperdb.Book
-import okio.buffer
-import okio.sink
-import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,18 +18,8 @@ interface AlarmKeeper {
 
 @Singleton
 class DefaultAlarmKeeper @Inject constructor(
-    private val alarmBook: Book,
-    private val alarmListJsonAdapter: JsonAdapter<List<Alarm>>,
-    outputFile: File
+    private val alarmBook: Book
 ): AlarmKeeper {
-
-    init {
-        outputFile.outputStream().use { stream ->
-            stream.sink().buffer().use {
-                alarmListJsonAdapter.toJson(it, alarms)
-            }
-        }
-    }
 
     override fun getAlarmById(id: UUID): Alarm? = alarms.find { it.id == id }
 
@@ -56,7 +42,7 @@ class DefaultAlarmKeeper @Inject constructor(
         updateAlarms(alarms)
     }
 
-    override val alarms: List<Alarm> get() = alarmBook.read(COLLECTION_KEY, listOf())
+    override val alarms: List<Alarm> get() = alarmBook.read(COLLECTION_KEY, listOf()) ?: listOf()
 
     override val hasAlarms: Boolean get() = alarms.isNotEmpty()
 

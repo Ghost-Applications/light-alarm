@@ -1,5 +1,5 @@
 # new R8 stuff
--allowaccessmodification
+#-allowaccessmodification
 -assumevalues class android.os.Build$VERSION {
     int SDK_INT return 21..1000;
 }

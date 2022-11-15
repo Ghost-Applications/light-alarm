@@ -3,7 +3,6 @@ kotlin = "1.7.20"
 firebase = "30.5.0"
 dagger = "2.44"
 coroutines = "1.6.4"
-moshi = "1.14.0"
 
 [libraries]
 android-build-gradle = { module = "com.android.tools.build:gradle", version = "7.3.0"}
@@ -23,11 +22,7 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1"}
-paper = { module = "io.paperdb:paperdb", version = "2.7.1" }
-
-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
-moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
-okio = { module = "com.squareup.okio:okio", version = "3.2.0" }
+paper = { module = "io.github.pilgr:paperdb", version = "2.7.2" }
 
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 truth = { module = "com.google.truth:truth", version = "1.1.3"}
