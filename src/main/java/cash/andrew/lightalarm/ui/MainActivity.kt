@@ -1,8 +1,14 @@
 package cash.andrew.lightalarm.ui
 
+import android.Manifest
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.format.DateFormat
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +20,14 @@ import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.R
 import cash.andrew.lightalarm.data.*
 import cash.andrew.lightalarm.databinding.ActivityMainBinding
+import com.fondesa.kpermissions.anyPermanentlyDenied
+import com.fondesa.kpermissions.anyShouldShowRationale
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalTime
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
 
@@ -46,6 +57,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
             return
         }
 
+        handleNotificationPermission()
         showAlarmList()
 
         binding.alarmsList.layoutManager = LinearLayoutManager(this)
@@ -82,8 +94,43 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
     private fun showAlarmList() {
         binding.mainActivityContainer.displayedChildId = if (alarmKeeper.hasAlarms) {
             binding.alarmsList.id
+        } else binding.mainNoAlarmsSetup.id
+    }
+
+    private fun handleNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        val request = permissionsBuilder(Manifest.permission.POST_NOTIFICATIONS).build()
+
+        request.send { result ->
+            when {
+                result.anyPermanentlyDenied() -> {
+                    AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.permission_required))
+                        .setMessage(getString(R.string.permanently_denied_message))
+                        .setPositiveButton(R.string.action_settings) { _, _ ->
+                            // Open the app's settings.
+                            val intent = Intent().apply {
+                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = Uri.fromParts("package", packageName, null)
+                            }
+                            startActivity(intent)
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                }
+                result.anyShouldShowRationale() -> {
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.permission_required)
+                        .setMessage(getString(R.string.permission_request_message))
+                        .setPositiveButton(getString(R.string.request_again)) { _, _ ->
+                            request.send()
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                }
+            }
         }
-        else binding.mainNoAlarmsSetup.id
     }
 }
 

@@ -23,7 +23,7 @@ class AlarmReceiver : BroadcastReceiver() {
         context.alarmAppComponent.inject(this)
 
         val id = intent.alarmIdExtra
-        val alarm = alarmKeeper.getAlarmById(id)!!
+        val alarm = requireNotNull(alarmKeeper.getAlarmById(id))
 
         // if alarm doesn't repeat disable it
         // so it doesn't go off again tomorrow.

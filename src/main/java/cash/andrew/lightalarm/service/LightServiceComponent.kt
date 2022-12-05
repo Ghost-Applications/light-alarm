@@ -1,6 +1,6 @@
 package cash.andrew.lightalarm.service
 
-import cash.andrew.lightalarm.NotificationManager
+import cash.andrew.lightalarm.data.LightController
 import dagger.Subcomponent
 import javax.inject.Scope
 
@@ -12,5 +12,5 @@ annotation class LightServiceScope
 interface LightServiceComponent {
     fun inject(lightService: LightService)
 
-    val notificationManager: NotificationManager
+    val lightController: LightController
 }

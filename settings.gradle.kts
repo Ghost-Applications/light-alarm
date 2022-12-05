@@ -13,8 +13,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // can be removed when paperDB is removed
-        jcenter()
     }
 }
 

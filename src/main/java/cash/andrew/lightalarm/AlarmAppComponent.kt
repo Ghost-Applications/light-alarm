@@ -10,6 +10,8 @@ import android.hardware.camera2.CameraManager
 import android.os.Vibrator
 import android.text.format.DateFormat
 import androidx.core.content.getSystemService
+import cash.andrew.lightalarm.data.AlarmKeeper
+import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.data.DataModule
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.reciever.AlarmBootReceiver
@@ -40,7 +42,10 @@ interface AlarmAppComponent {
     val activityComponentBuilder: ActivityComponent.Builder
     val lightServiceComponent: LightServiceComponent
     val notificationManager: NotificationManager
+    val lightAlarmNotificationManager: cash.andrew.lightalarm.NotificationManager
     val firebaseCrashlytics: FirebaseCrashlytics
+    val alarmScheduler: AlarmScheduler
+    val alarmKeeper: AlarmKeeper
 
     @Component.Builder
     interface Builder {
