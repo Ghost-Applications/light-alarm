@@ -21,4 +21,8 @@
     <string name="no_lights">Your device doesn\'t seem to have any flashlights. Unfortunately this app won\'t work without flashlights.</string>
     <string name="dismiss">Dismiss</string>
     <string name="snooze">Snooze</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permanently_denied_message">In order for this app to work properly and notify you when the alarm has gone off the notification permission in required. Please enable notifications in app settings.</string>
+    <string name="permission_request_message">The notification permissions is needed to show an alert when your alarm goes off. The app will not function properly with out this permission.</string>
+    <string name="request_again">Request again</string>
 </resources>

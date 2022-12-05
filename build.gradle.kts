@@ -118,6 +118,8 @@ dependencies {
 
     implementation(libs.paper)
 
+    implementation(libs.kpermissions)
+
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.truth)
 }
