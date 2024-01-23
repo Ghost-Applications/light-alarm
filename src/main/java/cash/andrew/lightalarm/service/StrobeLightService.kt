@@ -25,6 +25,8 @@ fun Context.startStrobeService(alarmId: UUID) {
         action = LightService.LightServiceAction.START.name
         putAlarmIdExtra(alarmId)
     }
+
+
     startForegroundService(intent)
 }
 

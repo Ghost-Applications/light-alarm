@@ -73,20 +73,36 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(binding.alarmsList)
 
         binding.fab.debounceClickListener {
-            val localTime = LocalTime.now()
-            TimePickerDialog(this, { _, hour, minute ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.permission_required))
+                    .setMessage(getString(R.string.schedule_alarm_permanently_denied_message))
+                    .setPositiveButton(R.string.action_settings) { _, _ ->
+                        // Open the app's settings.
+                        val intent = Intent().apply {
+                            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                            data = Uri.fromParts("package", packageName, null)
+                        }
+                        startActivity(intent)
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            } else {
+                val localTime = LocalTime.now()
+                TimePickerDialog(this, { _, hour, minute ->
 
-                val alarm = Alarm(
-                    time = LocalTime.of(hour, minute)
-                )
+                    val alarm = Alarm(
+                        time = LocalTime.of(hour, minute)
+                    )
 
-                alarmKeeper.addAlarm(alarm)
-                alarmScheduler.scheduleNextAlarm()
-                alarmAdapter.addAlarm(alarm)
+                    alarmKeeper.addAlarm(alarm)
+                    alarmScheduler.scheduleNextAlarm()
+                    alarmAdapter.addAlarm(alarm)
 
-                showAlarmList()
+                    showAlarmList()
 
-            }, localTime.hour, localTime.minute, DateFormat.is24HourFormat(this)).show()
+                }, localTime.hour, localTime.minute, DateFormat.is24HourFormat(this)).show()
+            }
         }
     }
 
@@ -107,7 +123,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
                 result.anyPermanentlyDenied() -> {
                     AlertDialog.Builder(this)
                         .setTitle(getString(R.string.permission_required))
-                        .setMessage(getString(R.string.permanently_denied_message))
+                        .setMessage(getString(R.string.notification_permanently_denied_message))
                         .setPositiveButton(R.string.action_settings) { _, _ ->
                             // Open the app's settings.
                             val intent = Intent().apply {
@@ -122,7 +138,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
                 result.anyShouldShowRationale() -> {
                     AlertDialog.Builder(this)
                         .setTitle(R.string.permission_required)
-                        .setMessage(getString(R.string.permission_request_message))
+                        .setMessage(getString(R.string.notification_permission_request_message))
                         .setPositiveButton(getString(R.string.request_again)) { _, _ ->
                             request.send()
                         }

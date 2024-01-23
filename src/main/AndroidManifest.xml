@@ -4,11 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 
     <application
         android:name=".AlarmApp"
@@ -25,8 +27,15 @@
         <service
             android:name=".service.StrobeLightService"
             android:enabled="true"
-            android:exported="false" />
-        <service android:name=".service.RegularLightService" />
+            android:exported="false"
+            android:foregroundServiceType="systemExempted"
+            />
+
+        <service android:name=".service.RegularLightService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="systemExempted"
+            />
 
         <receiver
             android:name=".reciever.AlarmBootReceiver"
@@ -44,7 +53,6 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleInstance"

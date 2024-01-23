@@ -13,6 +13,7 @@ import cash.andrew.lightalarm.NotificationManager.Companion.ALARM_NOTIFICATION_I
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -47,7 +48,11 @@ abstract class LightService : Service(), CoroutineScope by MainScope() {
         val alarm = requireNotNull(alarmKeeper.getAlarmById(intent.alarmIdExtra))
         startForeground(ALARM_NOTIFICATION_ID, notificationManager.alarmNotification(alarm))
 
-        job = launch { start() }
+        job = launch {
+            // give the system some time to show the notification first
+            delay(8 * 1000)
+            start()
+        }
 
         return START_REDELIVER_INTENT
     }

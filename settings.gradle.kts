@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "light-alarm"
 
@@ -17,7 +19,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise").version("3.8.1")
+    id("com.gradle.enterprise").version("3.16.1")
 }
 
 gradleEnterprise {

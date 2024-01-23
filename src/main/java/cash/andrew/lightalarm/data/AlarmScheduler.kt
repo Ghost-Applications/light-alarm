@@ -4,6 +4,9 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
+import android.widget.Toast
+import cash.andrew.lightalarm.BuildConfig
 import cash.andrew.lightalarm.misc.putAlarmIdExtra
 import cash.andrew.lightalarm.reciever.AlarmReceiver
 import cash.andrew.lightalarm.ui.MainActivity
@@ -83,6 +86,23 @@ class AlarmScheduler @Inject constructor(
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (alarmManager.canScheduleExactAlarms()) {
+                scheduleAlarm(time, showIntent, operation)
+            } else {
+                Timber.w("Application does not have permission to schedule alarms.")
+                Toast.makeText(application, "Unable to schedule alarm, the Alarms & reminders permission is required.", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            scheduleAlarm(time, showIntent, operation)
+        }
+    }
+
+    private fun scheduleAlarm(
+        time: ZonedDateTime,
+        showIntent: PendingIntent?,
+        operation: PendingIntent
+    ) {
         Timber.d("Scheduling alarm at %s", time)
         alarmManager.setAlarmClock(
             AlarmManager.AlarmClockInfo(time.toInstant().toEpochMilli(), showIntent),
