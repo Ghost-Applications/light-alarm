@@ -23,13 +23,13 @@ play {
 
 android {
     namespace = "cash.andrew.lightalarm"
-    compileSdk = 33
-    buildToolsVersion = "30.0.3"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "cash.andrew.lightalarm"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()

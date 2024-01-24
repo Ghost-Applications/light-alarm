@@ -22,7 +22,9 @@
     <string name="dismiss">Dismiss</string>
     <string name="snooze">Snooze</string>
     <string name="permission_required">Permission Required</string>
-    <string name="permanently_denied_message">In order for this app to work properly and notify you when the alarm has gone off the notification permission in required. Please enable notifications in app settings.</string>
-    <string name="permission_request_message">The notification permissions is needed to show an alert when your alarm goes off. The app will not function properly with out this permission.</string>
+    <string name="notification_permanently_denied_message">In order for this app to work properly and notify you when the alarm has gone off the notification permission in required. Please enable notifications in app settings.</string>
+    <string name="notification_permission_request_message">The notification permissions is needed to show an alert when your alarm goes off. The app will not function properly with out this permission.</string>
     <string name="request_again">Request again</string>
+    <string name="schedule_alarm_permanently_denied_message">In order for this app to work properly as an alarm, the alarm permission in required. Please enable alarms in app settings.</string>
+    <string name="schedule_alarm_permission_request_message">The alarm permission is needed in order for this app to function as an alarm clock. The app will not function properly with out this permission.</string>
 </resources>
