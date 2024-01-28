@@ -1,6 +1,7 @@
 package cash.andrew.lightalarm.data
 
 import io.paperdb.Book
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,7 +43,12 @@ class DefaultAlarmKeeper @Inject constructor(
         updateAlarms(alarms)
     }
 
-    override val alarms: List<Alarm> get() = alarmBook.read(COLLECTION_KEY, listOf()) ?: listOf()
+    override val alarms: List<Alarm> get() = try {
+        alarmBook.read(COLLECTION_KEY, listOf())
+    } catch (e: Exception) {
+        Timber.e(e, "Error loading alarms from disk")
+        null
+    }?: listOf()
 
     override val hasAlarms: Boolean get() = alarms.isNotEmpty()
 
