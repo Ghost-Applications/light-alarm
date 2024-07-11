@@ -1,19 +1,21 @@
 [versions]
-kotlin = "1.7.20"
+kotlin = "1.9.24"
 firebase = "30.5.0"
-dagger = "2.50"
-coroutines = "1.7.3"
+dagger = "2.51.1"
+coroutines = "1.8.1"
 
 [libraries]
-android-build-gradle = { module = "com.android.tools.build:gradle", version = "8.2.1"}
+android-build-gradle = { module = "com.android.tools.build:gradle", version = "8.5.0"}
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
-androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
+androidx-core = { module = "androidx.core:core-ktx", version = "1.13.1" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
 androidx-dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version = "1.0.0" }
 
-material = { module = "com.google.android.material:material", version = "1.11.0" }
+material = { module = "com.google.android.material:material", version = "1.12.0" }
 
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger"}
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -38,6 +40,6 @@ buildSrc = [
 [plugins]
 version-check = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 play-publisher = { id = "com.github.triplet.play", version = "3.8.6"}
-google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.9" }
-ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.6" }
+google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
