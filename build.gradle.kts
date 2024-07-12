@@ -23,13 +23,13 @@ play {
 
 android {
     namespace = "cash.andrew.lightalarm"
-    compileSdk = 34
+    compileSdk = 35
     buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "cash.andrew.lightalarm"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
@@ -104,8 +104,8 @@ dependencies {
     implementation(libs.androidx.dynamicanimation)
 
     implementation(platform("com.google.firebase:firebase-bom:${libs.versions.firebase.get()}"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
 
     implementation(libs.material)
     implementation(libs.dagger)
