@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
+import cash.andrew.lightalarm.AlarmApp.Companion.ALARM_CHANNEL_ID
 import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.data.AlarmDateTimeFormatter
 import cash.andrew.lightalarm.misc.putAlarmIdExtra
@@ -13,7 +14,6 @@ import cash.andrew.lightalarm.ui.AlarmActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val ALARM_CHANNEL_ID = "Alarm"
 private const val ALARM_NOTIFICATION_PENDING_INTENT_ID = 7589
 
 @Singleton

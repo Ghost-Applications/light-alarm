@@ -3,14 +3,17 @@ package cash.andrew.lightalarm.ui
 import android.Manifest
 import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
     @Inject lateinit var alarmAdapter: AlarmRecyclerAdapter
     @Inject lateinit var alarmScheduler: AlarmScheduler
     @Inject lateinit var lightController: LightController
+    @Inject lateinit var notificationManager: NotificationManager
 
     private lateinit var binding: ActivityMainBinding
 
@@ -58,6 +62,7 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         }
 
         handleNotificationPermission()
+        handleFullScreenIntent()
         showAlarmList()
 
         binding.alarmsList.layoutManager = LinearLayoutManager(this)
@@ -147,6 +152,21 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
                 }
             }
         }
+    }
+
+    private fun handleFullScreenIntent() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || notificationManager.canUseFullScreenIntent()) return
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.permission_required)
+            .setMessage(getString(R.string.notification_full_screen_message_request))
+            .setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                startActivity(Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                    .addFlags(FLAG_ACTIVITY_NEW_TASK))
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 }
 
