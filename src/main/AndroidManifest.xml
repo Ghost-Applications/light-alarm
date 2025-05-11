@@ -38,7 +38,7 @@
             />
 
         <receiver
-            android:name=".reciever.AlarmBootReceiver"
+            android:name=".receiver.AlarmBootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -47,7 +47,7 @@
         </receiver>
 
         <receiver
-            android:name=".reciever.AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
@@ -70,7 +70,6 @@
             android:label="@string/title_activity_alarm"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="userPortrait"
             android:excludeFromRecents="true"
             tools:ignore="LockedOrientationActivity"
             />

@@ -14,18 +14,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
-import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.databinding.ActivityAlarmBinding
 import cash.andrew.lightalarm.misc.addOnGlobalLayoutListener
 import cash.andrew.lightalarm.misc.alarmIdExtra
 import cash.andrew.lightalarm.service.stopLightService
 import cash.andrew.lightalarm.service.stopStrobeService
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
-class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
+@AndroidEntryPoint
+class AlarmActivity : AppCompatActivity() {
 
     @Inject lateinit var alarmScheduler: AlarmScheduler
     @Inject lateinit var vibrator: Vibrator
@@ -33,13 +34,9 @@ class AlarmActivity : AppCompatActivity(), ComponentContainer<ActivityComponent>
 
     private lateinit var binding: ActivityAlarmBinding
 
-    override val component: ActivityComponent by lazy { makeComponent() }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        component.inject(this)
 
         showOverLockScreen()
 

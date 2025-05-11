@@ -1,12 +1,12 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.gradle.plugin)
 
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.play.publisher)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.version.check)
 
     id("build-number")
@@ -24,7 +24,6 @@ play {
 android {
     namespace = "cash.andrew.lightalarm"
     compileSdk = 35
-    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "cash.andrew.lightalarm"
@@ -79,8 +78,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -108,8 +107,8 @@ dependencies {
     implementation(libs.firebase.crashlytics.ktx)
 
     implementation(libs.material)
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
@@ -122,8 +121,4 @@ dependencies {
 
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.truth)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }

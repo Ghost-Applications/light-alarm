@@ -6,10 +6,10 @@ import android.os.Build
 import android.os.PowerManager
 import android.os.PowerManager.*
 import android.view.WindowManager.LayoutParams.*
-import cash.andrew.lightalarm.ui.ActivityScope
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
-@ActivityScope
+@ActivityScoped
 class DefaultRiseAndShine @Inject constructor(
     private val activity: Activity
 ): RiseAndShine {

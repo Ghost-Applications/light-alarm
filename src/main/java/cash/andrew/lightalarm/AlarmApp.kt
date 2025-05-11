@@ -4,28 +4,25 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import io.paperdb.Paper
+import javax.inject.Inject
 
-abstract class AlarmApp : Application(), ComponentContainer<AlarmAppComponent> {
+abstract class AlarmApp : Application() {
 
     companion object {
         const val ALARM_CHANNEL_ID = "Alarm"
     }
 
-    private lateinit var _component: AlarmAppComponent
-    override val component: AlarmAppComponent by lazy { _component }
+    @Inject lateinit var notificationManager: NotificationManager
+
 
     override fun onCreate() {
         super.onCreate()
-
-        _component = componentBuilder
-            .application(this)
-            .build()
 
         setup()
 
         Paper.init(this)
 
-        component.notificationManager.createNotificationChannel(
+        notificationManager.createNotificationChannel(
             NotificationChannel(ALARM_CHANNEL_ID, "Alarm", NotificationManager.IMPORTANCE_HIGH)
         )
     }

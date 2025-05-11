@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import cash.andrew.lightalarm.data.Alarm
 import cash.andrew.lightalarm.R.layout
 import cash.andrew.lightalarm.data.AlarmKeeper
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.util.*
 import javax.inject.Inject
 
-@ActivityScope
+@ActivityRetainedScoped
 class AlarmRecyclerAdapter @Inject constructor(keeper: AlarmKeeper) : BindableRecyclerAdapter<Alarm>() {
 
     private val alarms: MutableList<Alarm> = keeper.alarms

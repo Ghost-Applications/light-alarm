@@ -13,13 +13,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.format.DateFormat
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cash.andrew.lightalarm.BuildConfig
-import cash.andrew.lightalarm.ComponentContainer
 import cash.andrew.lightalarm.R
 import cash.andrew.lightalarm.data.*
 import cash.andrew.lightalarm.databinding.ActivityMainBinding
@@ -28,13 +26,12 @@ import com.fondesa.kpermissions.anyShouldShowRationale
 import com.fondesa.kpermissions.extension.permissionsBuilder
 import com.fondesa.kpermissions.extension.send
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import javax.inject.Inject
 
-
-class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> {
-
-    override val component: ActivityComponent by lazy { makeComponent() }
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var alarmManager: AlarmManager
     @Inject lateinit var alarmKeeper: AlarmKeeper
@@ -53,7 +50,6 @@ class MainActivity : AppCompatActivity(), ComponentContainer<ActivityComponent> 
         setContentView(view)
 
         setSupportActionBar(binding.toolbar)
-        component.inject(this)
 
         if (!lightController.hasFlashLight && !BuildConfig.DEBUG) {
             binding.mainActivityContainer.displayedChildId = binding.mainNoLights.id

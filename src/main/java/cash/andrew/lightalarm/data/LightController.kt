@@ -14,7 +14,7 @@ class LightController @Inject constructor(private val cameraManager: CameraManag
     private val cameraWithFlashLightId =
         cameraManager.cameraIdList
             .firstOrNull {
-                cameraManager.getCameraCharacteristics(it).get(FLASH_INFO_AVAILABLE) ?: false
+                cameraManager.getCameraCharacteristics(it).get(FLASH_INFO_AVAILABLE) == true
             }
 
     private var state: LightState = OFF

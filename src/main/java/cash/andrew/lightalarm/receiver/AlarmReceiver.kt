@@ -1,16 +1,17 @@
-package cash.andrew.lightalarm.reciever
+package cash.andrew.lightalarm.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import cash.andrew.lightalarm.alarmAppComponent
 import cash.andrew.lightalarm.data.*
 import cash.andrew.lightalarm.misc.alarmIdExtra
 import cash.andrew.lightalarm.service.startLightService
 import cash.andrew.lightalarm.service.startStrobeService
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
 
     @Inject lateinit var alarmKeeper: AlarmKeeper
@@ -19,8 +20,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("onReceived called context=%s, intent=%s", context, intent)
-
-        context.alarmAppComponent.inject(this)
 
         val id = intent.alarmIdExtra
         val alarm = requireNotNull(alarmKeeper.getAlarmById(id))

@@ -10,6 +10,7 @@ import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.databinding.AlarmListItemViewBinding
 import cash.andrew.lightalarm.misc.toEnumSet
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.DayOfWeek.FRIDAY
@@ -24,6 +25,7 @@ import java.time.ZonedDateTime
 import java.util.Date
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmListItemView(
     context: Context,
     attrs: AttributeSet?
@@ -46,10 +48,6 @@ class AlarmListItemView(
         )
 
     private val binding: AlarmListItemViewBinding by lazy { AlarmListItemViewBinding.bind(this) }
-
-    init {
-        context.activityComponent.inject(this)
-    }
 
     fun bind(alarm: Alarm) {
         Timber.d("bind() called alarm = %s", alarm)

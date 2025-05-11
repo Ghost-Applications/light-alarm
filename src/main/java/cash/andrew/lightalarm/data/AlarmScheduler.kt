@@ -6,9 +6,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
-import cash.andrew.lightalarm.BuildConfig
 import cash.andrew.lightalarm.misc.putAlarmIdExtra
-import cash.andrew.lightalarm.reciever.AlarmReceiver
+import cash.andrew.lightalarm.receiver.AlarmReceiver
 import cash.andrew.lightalarm.ui.MainActivity
 import org.jetbrains.annotations.TestOnly
 import timber.log.Timber

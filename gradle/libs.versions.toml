@@ -1,24 +1,19 @@
 [versions]
-kotlin = "1.9.24"
+kotlin = "2.1.20"
 firebase = "30.5.0"
-dagger = "2.51.1"
-coroutines = "1.8.1"
+coroutines = "1.10.2"
+hilt = "2.56.1"
 
 [libraries]
-android-build-gradle = { module = "com.android.tools.build:gradle", version = "8.5.1"}
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
-androidx-core = { module = "androidx.core:core-ktx", version = "1.13.1" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
-androidx-dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version = "1.0.0" }
+androidx-core = { module = "androidx.core:core-ktx", version = "1.16.0" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
+androidx-dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version = "1.1.0" }
 
 material = { module = "com.google.android.material:material", version = "1.12.0" }
-
-dagger = { module = "com.google.dagger:dagger", version.ref = "dagger"}
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -28,18 +23,18 @@ paper = { module = "io.github.pilgr:paperdb", version = "2.7.2" }
 
 kpermissions = { module = "com.github.fondesa:kpermissions", version = "3.4.0" }
 
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 truth = { module = "com.google.truth:truth", version = "1.4.4"}
 
-[bundles]
-buildSrc = [
-    "android-build-gradle",
-    "kotlin-gradle-plugin",
-]
-
 [plugins]
-version-check = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+android-application = { id = "com.android.application", version = "8.9.2" }
+kotlin-gradle-plugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin"}
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+version-check = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 play-publisher = { id = "com.github.triplet.play", version = "3.10.1"}
 google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.23" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.31" }

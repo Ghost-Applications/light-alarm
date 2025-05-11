@@ -1,20 +1,31 @@
 package cash.andrew.lightalarm
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import cash.andrew.lightalarm.data.Alarm
+import cash.andrew.lightalarm.data.AlarmKeeper
+import cash.andrew.lightalarm.data.AlarmScheduler
+import cash.andrew.lightalarm.data.LightController
 import cash.andrew.lightalarm.databinding.ActivityNotificationTestBinding
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.ZonedDateTime
 import java.util.*
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
-class TestActivity: Activity() {
+@AndroidEntryPoint
+class TestActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityNotificationTestBinding
+
+    @Inject lateinit var lightController: LightController
+    @Inject lateinit var alarmScheduler: AlarmScheduler
+    @Inject lateinit var alarmKeeper: AlarmKeeper
+    @Inject lateinit var notificationManager: NotificationManager
 
     @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,11 +33,6 @@ class TestActivity: Activity() {
 
         binding = ActivityNotificationTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val lightController = alarmAppComponent.lightServiceComponent.lightController
-        val notificationManager = alarmAppComponent.lightAlarmNotificationManager
-        val alarmScheduler = alarmAppComponent.alarmScheduler
-        val alarmKeeper = alarmAppComponent.alarmKeeper
 
         binding.testAlarmNotification.setOnClickListener {
             it.postDelayed({

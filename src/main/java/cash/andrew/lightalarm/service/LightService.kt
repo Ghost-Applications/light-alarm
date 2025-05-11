@@ -4,22 +4,22 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import cash.andrew.lightalarm.NotificationManager
-import cash.andrew.lightalarm.alarmAppComponent
 import cash.andrew.lightalarm.data.AlarmKeeper
 import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.data.LightController
 import cash.andrew.lightalarm.misc.alarmIdExtra
 import cash.andrew.lightalarm.NotificationManager.Companion.ALARM_NOTIFICATION_ID
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
+@AndroidEntryPoint
 abstract class LightService : Service(), CoroutineScope by MainScope() {
-    private val Intent.lightServiceAction get() = LightServiceAction.values().first { action == it.name }
+    private val Intent.lightServiceAction get() = LightServiceAction.entries.first { action == it.name }
 
     enum class LightServiceAction {
         START,
@@ -32,10 +32,6 @@ abstract class LightService : Service(), CoroutineScope by MainScope() {
     @Inject lateinit var alarmScheduler: AlarmScheduler
 
     private var job: Job? = null
-
-    final override fun onCreate() {
-        alarmAppComponent.lightServiceComponent.inject(this)
-    }
 
     final override fun onBind(intent: Intent): IBinder? = null
 

@@ -8,55 +8,21 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.hardware.camera2.CameraManager
 import android.os.Vibrator
-import android.text.format.DateFormat
 import androidx.core.content.getSystemService
-import cash.andrew.lightalarm.data.AlarmKeeper
-import cash.andrew.lightalarm.data.AlarmScheduler
-import cash.andrew.lightalarm.data.DataModule
-import cash.andrew.lightalarm.reciever.AlarmReceiver
-import cash.andrew.lightalarm.reciever.AlarmBootReceiver
-import cash.andrew.lightalarm.service.LightServiceComponent
-import cash.andrew.lightalarm.ui.ActivityComponent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dagger.BindsInstance
-import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import io.paperdb.Book
 import io.paperdb.Paper
 import java.io.File
+import java.text.DateFormat
 import java.time.Clock
 import javax.inject.Singleton
 
-val componentBuilder: AlarmAppComponent.Builder = DaggerAlarmAppComponent.builder()
-
-@Suppress("UNCHECKED_CAST")
-val Context.alarmAppComponent: AlarmAppComponent get() = (applicationContext as ComponentContainer<AlarmAppComponent>).component
-
-@Singleton
-@Component(modules = [AlarmAppModule::class, DataModule::class])
-interface AlarmAppComponent {
-    fun inject(alarmReceiver: AlarmReceiver)
-    fun inject(bootReceiver: AlarmBootReceiver)
-
-    val activityComponentBuilder: ActivityComponent.Builder
-    val lightServiceComponent: LightServiceComponent
-    val notificationManager: NotificationManager
-    val lightAlarmNotificationManager: cash.andrew.lightalarm.NotificationManager
-    val firebaseCrashlytics: FirebaseCrashlytics
-    val alarmScheduler: AlarmScheduler
-    val alarmKeeper: AlarmKeeper
-
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): AlarmAppComponent
-    }
-}
-
 @Module
+@InstallIn(SingletonComponent::class)
 object AlarmAppModule {
 
     @Provides
@@ -89,7 +55,7 @@ object AlarmAppModule {
 
     @Provides
     @Singleton
-    fun provideDateTimeFormatter(app: Application): java.text.DateFormat = DateFormat.getTimeFormat(app)
+    fun provideDateTimeFormatter(app: Application): DateFormat = android.text.format.DateFormat.getTimeFormat(app)
 
     @Provides
     @Singleton
