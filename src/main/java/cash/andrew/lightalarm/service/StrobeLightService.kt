@@ -9,7 +9,7 @@ import java.util.*
 class StrobeLightService : LightService() {
 
     override suspend fun start() {
-        while(isActive) {
+        for(i in 0 .. (10 * 60)) {
             if (lightController.isLightOn) {
                 lightController.turnOff()
             } else {

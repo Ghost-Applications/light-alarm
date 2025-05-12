@@ -11,10 +11,9 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.util.*
 import javax.inject.Inject
 
-@ActivityRetainedScoped
-class AlarmRecyclerAdapter @Inject constructor(keeper: AlarmKeeper) : BindableRecyclerAdapter<Alarm>() {
+class AlarmRecyclerAdapter(alarms: List<Alarm>) : BindableRecyclerAdapter<Alarm>() {
 
-    private val alarms: MutableList<Alarm> = keeper.alarms
+    private val alarms: MutableList<Alarm> = alarms
         .toMutableList()
         .apply { sortBy { it.time } }
 

@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import cash.andrew.lightalarm.misc.putAlarmIdExtra
 import cash.andrew.lightalarm.receiver.AlarmReceiver
 import cash.andrew.lightalarm.ui.MainActivity
@@ -24,19 +25,19 @@ private const val ALARM_BROADCAST_RECEIVER_ID = 4371
 @Singleton
 class AlarmScheduler @Inject constructor(
     private val application: Application,
-    private val alarmManager: AlarmManager,
+    private val alarmManager: LightAlarmAlarmManager,
     private val alarmKeeper: AlarmKeeper,
     private val clock: Clock
 ) {
-    fun scheduleNextAlarm() {
+    suspend fun scheduleNextAlarm() {
         cancelAlarms()
 
-        val (nextAlarm, alarmId) = nextAlarmTime ?: return
+        val (nextAlarm, alarmId) = nextAlarmTime() ?: return
         schedule(nextAlarm, alarmId)
     }
 
-    @get:TestOnly
-    val nextAlarmTime: Pair<ZonedDateTime, UUID>? get() = alarmKeeper.alarms
+    @TestOnly
+    suspend fun nextAlarmTime(): Pair<ZonedDateTime, UUID>? = alarmKeeper.alarms()
         .asSequence()
         .filter { it.enabled }
         .map {

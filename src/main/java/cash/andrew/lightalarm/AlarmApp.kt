@@ -3,7 +3,6 @@ package cash.andrew.lightalarm
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import io.paperdb.Paper
 import javax.inject.Inject
 
 abstract class AlarmApp : Application() {
@@ -19,8 +18,6 @@ abstract class AlarmApp : Application() {
         super.onCreate()
 
         setup()
-
-        Paper.init(this)
 
         notificationManager.createNotificationChannel(
             NotificationChannel(ALARM_CHANNEL_ID, "Alarm", NotificationManager.IMPORTANCE_HIGH)

@@ -5,12 +5,13 @@ import android.content.Intent
 import cash.andrew.lightalarm.misc.putAlarmIdExtra
 import kotlinx.coroutines.*
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 class RegularLightService : LightService() {
-
     override suspend fun start() {
         // run to keep the light turned on until turned off inside the app
-        while (isActive) {
+        // 10 minutes or 10 * 60 * 2 (because we delay for 500 ms)
+        for (i in 0 .. (10 * 60 * 2)) {
             lightController.turnOn()
             delay(500)
         }

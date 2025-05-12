@@ -8,11 +8,19 @@ import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.data.LightController
 import cash.andrew.lightalarm.databinding.ActivityNotificationTestBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.EnumSet
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -26,6 +34,8 @@ class TestActivity: AppCompatActivity() {
     @Inject lateinit var alarmScheduler: AlarmScheduler
     @Inject lateinit var alarmKeeper: AlarmKeeper
     @Inject lateinit var notificationManager: NotificationManager
+
+    private val coroutineScope = MainScope() + CoroutineName("TestActivityScope")
 
     @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +72,17 @@ class TestActivity: AppCompatActivity() {
                 days = EnumSet.allOf(DayOfWeek::class.java),
                 time = LocalTime.now()
             )
-            alarmKeeper.addAlarm(testAlarm)
+
+            coroutineScope.launch {
+                alarmKeeper.addAlarm(testAlarm)
+            }
 
             alarmScheduler.schedule(ZonedDateTime.now().plusSeconds(5), testAlarm.id)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
     }
 }
