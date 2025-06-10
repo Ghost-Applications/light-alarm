@@ -51,7 +51,7 @@ abstract class LightService : Service() {
 
             job = launch {
                 // give the system some time to show the notification first
-                    delay(8 * 1000)
+                delay(5 * 1000)
                 start()
             }
         }
@@ -67,6 +67,7 @@ abstract class LightService : Service() {
     }
 
     private fun stop() {
+        lightController.turnOff()
         job?.let {
             it.cancel()
             job = null
