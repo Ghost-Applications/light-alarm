@@ -11,6 +11,11 @@ import cash.andrew.lightalarm.data.AlarmScheduler
 import cash.andrew.lightalarm.databinding.AlarmListItemViewBinding
 import cash.andrew.lightalarm.misc.toEnumSet
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.DayOfWeek.FRIDAY
@@ -21,8 +26,6 @@ import java.time.DayOfWeek.THURSDAY
 import java.time.DayOfWeek.TUESDAY
 import java.time.DayOfWeek.WEDNESDAY
 import java.time.LocalTime
-import java.time.ZonedDateTime
-import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +33,8 @@ class AlarmListItemView(
     context: Context,
     attrs: AttributeSet?
 ) : ConstraintLayout(context, attrs) {
+
+    private val coroutineScope = MainScope() + CoroutineName("AlarmListItmeViewScope")
 
     @Inject lateinit var dateFormat: java.text.DateFormat
     @Inject lateinit var alarmKeeper: AlarmKeeper
@@ -52,7 +57,7 @@ class AlarmListItemView(
     fun bind(alarm: Alarm) {
         Timber.d("bind() called alarm = %s", alarm)
 
-        val currentAlarm = {
+        val currentAlarm: suspend () -> Alarm = {
             // return a default alarm if an alarm has been
             // added quickly after an alarm has been swiped away.
             alarmKeeper.getAlarmById(alarm.id) ?: Alarm(
@@ -69,39 +74,47 @@ class AlarmListItemView(
             binding.repeatCheckbox.isEnabled = isChecked
             binding.alarmDayGroup.children.forEach { it.isEnabled = isChecked }
 
-            val newAlarm = currentAlarm().copy(enabled = isChecked)
-            alarmKeeper.updateAlarm(newAlarm)
+            coroutineScope.launch {
+                val newAlarm = currentAlarm().copy(enabled = isChecked)
+                alarmKeeper.updateAlarm(newAlarm)
 
-            alarmScheduler.scheduleNextAlarm()
+                alarmScheduler.scheduleNextAlarm()
+            }
         }
 
         binding.strobeCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            // update alarm on disk...
-            val newAlarm = currentAlarm().copy(strobe = isChecked)
-            alarmKeeper.updateAlarm(newAlarm)
+            coroutineScope.launch {
+                // update alarm on disk...
+                val newAlarm = currentAlarm().copy(strobe = isChecked)
+                alarmKeeper.updateAlarm(newAlarm)
+            }
         }
 
         binding.repeatCheckbox.setOnCheckedChangeListener { _, isChecked ->
             // deal with alarm being one time or schedule for each day...
             binding.alarmDayGroup.children.forEach { it.isEnabled = isChecked }
 
-            val newAlarm = currentAlarm().copy(repeat = isChecked)
-            alarmKeeper.updateAlarm(newAlarm)
-            alarmScheduler.scheduleNextAlarm()
+            coroutineScope.launch {
+                val newAlarm = currentAlarm().copy(repeat = isChecked)
+                alarmKeeper.updateAlarm(newAlarm)
+                alarmScheduler.scheduleNextAlarm()
+            }
         }
 
         dayViews.forEach {
             it.setOnCheckedChangeListener { buttonView, isChecked ->
-                // update and schedule
-                val dayOfWeek = buttonView.tag as DayOfWeek
-                val updated = currentAlarm().copy(
-                    days = currentAlarm().days.toMutableSet()
-                        .apply { if (isChecked) add(dayOfWeek) else remove(dayOfWeek) }
-                        .toEnumSet()
-                )
+                coroutineScope.launch {
+                    // update and schedule
+                    val dayOfWeek = buttonView.tag as DayOfWeek
+                    val updated = currentAlarm().copy(
+                        days = currentAlarm().days.toMutableSet()
+                            .apply { if (isChecked) add(dayOfWeek) else remove(dayOfWeek) }
+                            .toEnumSet()
+                    )
 
-                alarmKeeper.updateAlarm(updated)
-                alarmScheduler.scheduleNextAlarm()
+                    alarmKeeper.updateAlarm(updated)
+                    alarmScheduler.scheduleNextAlarm()
+                }
             }
         }
     }
@@ -117,7 +130,7 @@ class AlarmListItemView(
         binding.repeatCheckbox.isEnabled = enabled
 
         dayViews.forEach { it.isEnabled = repeat }
-        DayOfWeek.values().forEach { dayOfWeek ->
+        DayOfWeek.entries.forEach { dayOfWeek ->
             val dayChip = when (dayOfWeek) {
                 MONDAY -> binding.chipMonday
                 TUESDAY -> binding.chipTuesday
@@ -131,5 +144,10 @@ class AlarmListItemView(
             dayChip.tag = dayOfWeek
             dayChip.isChecked = days.contains(dayOfWeek)
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        coroutineScope.cancel()
     }
 }

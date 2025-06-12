@@ -27,6 +27,12 @@ import com.fondesa.kpermissions.extension.permissionsBuilder
 import com.fondesa.kpermissions.extension.send
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -35,12 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var alarmManager: AlarmManager
     @Inject lateinit var alarmKeeper: AlarmKeeper
-    @Inject lateinit var alarmAdapter: AlarmRecyclerAdapter
     @Inject lateinit var alarmScheduler: AlarmScheduler
     @Inject lateinit var lightController: LightController
     @Inject lateinit var notificationManager: NotificationManager
 
     private lateinit var binding: ActivityMainBinding
+
+    private val coroutineScope = MainScope() + CoroutineName("MainActivityScope")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,57 +68,71 @@ class MainActivity : AppCompatActivity() {
         handleFullScreenIntent()
         showAlarmList()
 
-        binding.alarmsList.layoutManager = LinearLayoutManager(this)
-        binding.alarmsList.adapter = alarmAdapter
+        coroutineScope.launch {
+            val alarmAdapter = AlarmRecyclerAdapter(alarmKeeper.alarms())
+            binding.alarmsList.layoutManager = LinearLayoutManager(this@MainActivity)
+            binding.alarmsList.adapter = alarmAdapter
 
-        val swipeToRemoveAlarmHelper = SwipeToRemoveAlarmHelper(
-            view = binding.alarmsList,
-            alarmKeeper = alarmKeeper,
-            alarmAdapter = alarmAdapter,
-            alarmScheduler = alarmScheduler,
-            refreshView = ::showAlarmList
-        )
-        ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(binding.alarmsList)
+            val swipeToRemoveAlarmHelper = SwipeToRemoveAlarmHelper(
+                view = binding.alarmsList,
+                alarmKeeper = alarmKeeper,
+                alarmAdapter = alarmAdapter,
+                alarmScheduler = alarmScheduler,
+                refreshView = ::showAlarmList,
+                coroutineScope = coroutineScope
+            )
+            ItemTouchHelper(swipeToRemoveAlarmHelper).attachToRecyclerView(binding.alarmsList)
 
-        binding.fab.debounceClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.permission_required))
-                    .setMessage(getString(R.string.schedule_alarm_permanently_denied_message))
-                    .setPositiveButton(R.string.action_settings) { _, _ ->
-                        // Open the app's settings.
-                        val intent = Intent().apply {
-                            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                            data = Uri.fromParts("package", packageName, null)
+
+            binding.fab.debounceClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                    AlertDialog.Builder(this@MainActivity)
+                        .setTitle(getString(R.string.permission_required))
+                        .setMessage(getString(R.string.schedule_alarm_permanently_denied_message))
+                        .setPositiveButton(R.string.action_settings) { _, _ ->
+                            // Open the app's settings.
+                            val intent = Intent().apply {
+                                action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                                data = Uri.fromParts("package", packageName, null)
+                            }
+                            startActivity(intent)
                         }
-                        startActivity(intent)
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
-            } else {
-                val localTime = LocalTime.now()
-                TimePickerDialog(this, { _, hour, minute ->
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                } else {
+                    val localTime = LocalTime.now()
+                    TimePickerDialog(this@MainActivity, { _, hour, minute ->
 
-                    val alarm = Alarm(
-                        time = LocalTime.of(hour, minute)
-                    )
+                        val alarm = Alarm(
+                            time = LocalTime.of(hour, minute)
+                        )
 
-                    alarmKeeper.addAlarm(alarm)
-                    alarmScheduler.scheduleNextAlarm()
-                    alarmAdapter.addAlarm(alarm)
+                        coroutineScope.launch {
+                            alarmKeeper.addAlarm(alarm)
+                            alarmScheduler.scheduleNextAlarm()
+                            alarmAdapter.addAlarm(alarm)
 
-                    showAlarmList()
+                            showAlarmList()
+                        }
 
-                }, localTime.hour, localTime.minute, DateFormat.is24HourFormat(this)).show()
+                    }, localTime.hour, localTime.minute, DateFormat.is24HourFormat(this@MainActivity)).show()
+                }
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
+    }
+
     /** Shows alarm list or the no alarms set up message depending on if there are alarms. */
     private fun showAlarmList() {
-        binding.mainActivityContainer.displayedChildId = if (alarmKeeper.hasAlarms) {
-            binding.alarmsList.id
-        } else binding.mainNoAlarmsSetup.id
+        coroutineScope.launch {
+            binding.mainActivityContainer.displayedChildId = if (alarmKeeper.hasAlarms()) {
+                binding.alarmsList.id
+            } else binding.mainNoAlarmsSetup.id
+        }
     }
 
     private fun handleNotificationPermission() {
@@ -171,7 +192,8 @@ class SwipeToRemoveAlarmHelper(
     private val alarmKeeper: AlarmKeeper,
     private val alarmAdapter: AlarmRecyclerAdapter,
     private val alarmScheduler: AlarmScheduler,
-    private val refreshView: () -> Unit
+    private val refreshView: () -> Unit,
+    private val coroutineScope: CoroutineScope,
 ) : ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     override fun onMove(
         recyclerView: RecyclerView,
@@ -180,21 +202,29 @@ class SwipeToRemoveAlarmHelper(
     ): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        val removedAlarm = alarmAdapter.getItem(position)
-        alarmKeeper.removeAlarm(removedAlarm)
-        alarmAdapter.removeAlarm(position)
-        alarmScheduler.scheduleNextAlarm()
-        refreshView()
+        coroutineScope.launch {
+            val position = viewHolder.adapterPosition
+            val removedAlarm = alarmAdapter.getItem(position)
+            alarmKeeper.removeAlarm(removedAlarm)
+            alarmAdapter.removeAlarm(position)
+            alarmScheduler.scheduleNextAlarm()
+            refreshView()
 
-        Snackbar.make(view, view.context.getString(R.string.alarm_removed), Snackbar.LENGTH_LONG)
-            .setAction(view.context.getString(R.string.undo)) {
-                alarmKeeper.addAlarm(removedAlarm)
-                alarmAdapter.addAlarm(removedAlarm)
-                alarmScheduler.scheduleNextAlarm()
+            Snackbar.make(
+                view,
+                view.context.getString(R.string.alarm_removed),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction(view.context.getString(R.string.undo)) {
+                    coroutineScope.launch {
+                        alarmKeeper.addAlarm(removedAlarm)
+                        alarmAdapter.addAlarm(removedAlarm)
+                        alarmScheduler.scheduleNextAlarm()
 
-                refreshView()
-            }
-            .show()
+                        refreshView()
+                    }
+                }
+                .show()
+        }
     }
 }

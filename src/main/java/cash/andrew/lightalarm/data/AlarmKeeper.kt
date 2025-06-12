@@ -1,59 +1,62 @@
 package cash.andrew.lightalarm.data
 
-import io.paperdb.Book
-import timber.log.Timber
+import androidx.datastore.core.DataStore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val COLLECTION_KEY = "alarms"
-
 interface AlarmKeeper {
-    fun getAlarmById(id: UUID): Alarm?
-    fun addAlarm(alarm: Alarm)
-    fun updateAlarm(newAlarm: Alarm)
-    fun removeAlarm(alarm: Alarm)
-    val alarms: List<Alarm>
-    val hasAlarms: Boolean
+    suspend fun getAlarmById(id: UUID): Alarm?
+    suspend fun addAlarm(alarm: Alarm)
+    suspend fun updateAlarm(newAlarm: Alarm)
+    suspend fun removeAlarm(alarm: Alarm)
+    suspend fun alarms(): List<Alarm>
+    suspend fun hasAlarms(): Boolean
 }
 
 @Singleton
 class DefaultAlarmKeeper @Inject constructor(
-    private val alarmBook: Book
+    private val alarmStore: DataStore<List<Alarm>>
 ): AlarmKeeper {
 
-    override fun getAlarmById(id: UUID): Alarm? = alarms.find { it.id == id }
+    override suspend fun getAlarmById(id: UUID): Alarm? = this.alarms().find { it.id == id }
 
-    override fun addAlarm(alarm: Alarm) {
-        val alarms = this.alarms.toMutableList()
+    override suspend fun addAlarm(alarm: Alarm) {
+        val alarms = this.alarms().toMutableList()
         alarms.add(alarm)
         updateAlarms(alarms)
     }
 
-    override fun updateAlarm(newAlarm: Alarm) {
-        val alarms = this.alarms.toMutableList()
+    override suspend fun updateAlarm(newAlarm: Alarm) {
+        val alarms = this.alarms().toMutableList()
         alarms.removeIf { newAlarm.id == it.id }
         alarms.add(newAlarm)
         updateAlarms(alarms)
     }
 
-    override fun removeAlarm(alarm: Alarm) {
-        val alarms = this.alarms.toMutableList()
+    override suspend fun removeAlarm(alarm: Alarm) {
+        val alarms = this.alarms().toMutableList()
         alarms.removeIf { alarm.id == it.id }
         updateAlarms(alarms)
     }
 
-    override val alarms: List<Alarm> get() = try {
-        alarmBook.read(COLLECTION_KEY, listOf())
-    } catch (e: Exception) {
-        Timber.e(e, "Error loading alarms from disk")
-        null
-    }?: listOf()
+    override suspend fun alarms(): List<Alarm> {
+        return withContext(Dispatchers.IO) {
+            alarmStore.data.firstOrNull() ?: emptyList()
+        }
+    }
 
-    override val hasAlarms: Boolean get() = alarms.isNotEmpty()
+    override suspend fun hasAlarms(): Boolean {
+        return this.alarms().isNotEmpty()
+    }
 
-    private fun updateAlarms(alarms: List<Alarm>) {
+    private suspend fun updateAlarms(alarms: List<Alarm>) {
         val sortedList = alarms.sortedBy { it.time }
-        alarmBook.write(COLLECTION_KEY, sortedList)
+        alarmStore.updateData {
+            sortedList
+        }
     }
 }

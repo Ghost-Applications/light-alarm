@@ -4,21 +4,12 @@ plugins {
 
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.play.publisher)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.version.check)
+    alias(libs.plugins.kotlin.serialization)
 
     id("build-number")
     id("android-signing-config")
-}
-
-play {
-    serviceAccountCredentials.set(
-        rootProject.file(properties["cash.andrew.lightalarm.publishKey"] ?: "keys/publish-key.json")
-    )
-    track.set("internal")
-    defaultToAppBundles.set(true)
 }
 
 android {
@@ -26,13 +17,13 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "cash.andrew.lightalarm"
-        minSdk = 26
+        applicationId = "rocks.ghostapps.lightalarm"
+        minSdk = 21
         targetSdk = 35
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "roku"
+        versionName = "ALifeBeyondTheDream"
     }
 
     signingConfigs {
@@ -61,10 +52,6 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
@@ -78,8 +65,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 
     buildFeatures {
@@ -95,14 +82,13 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.dynamicanimation)
+    implementation(libs.androidx.datastore)
 
-    implementation(platform("com.google.firebase:firebase-bom:${libs.versions.firebase.get()}"))
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.crashlytics.ktx)
 
@@ -113,10 +99,9 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
 
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.timber)
-
-    implementation(libs.paper)
-
     implementation(libs.kpermissions)
 
     testImplementation(libs.mockito.kotlin)
