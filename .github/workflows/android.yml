@@ -76,4 +76,4 @@ jobs:
           packageName: rocks.ghostapps.lightalarm
           releaseFiles: build/outputs/bundle/release/*.aab
           track: internal
-          status: completed
+          status: draft
