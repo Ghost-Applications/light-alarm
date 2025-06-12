@@ -18,12 +18,12 @@ android {
 
     defaultConfig {
         applicationId = "rocks.ghostapps.lightalarm"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 35
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "roku"
+        versionName = "ALifeBeyondTheDream"
     }
 
     signingConfigs {
