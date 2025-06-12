@@ -27,14 +27,14 @@ jobs:
 
       - name: Set up signing properties in gradle.properties
         run: |
-          echo "cash.andrew.lightalarm.keystorePassword.keystorePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
-          echo "cash.andrew.lightalarm.keystorePassword.aliasKeyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> gradle.properties
-          echo "cash.andrew.lightalarm.keystorePassword.storeKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
-          echo "cash.andrew.lightalarm.keystorePassword.keystoreLocation=$(pwd)/keystore.jks" >> gradle.properties
+          echo "cash.andrew.lightalarm.keystorePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.aliasKeyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.storeKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.keystoreLocation=$(pwd)/keystore.jks" >> gradle.properties
 
       - name: Set build number in gradle.properties
         run: |
-          echo "cash.andrew.lightalarm.keystorePassword.buildNumber=${{ github.run_number }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.buildNumber=${{ github.run_number }}" >> gradle.properties
 
       - name: Build with Gradle (using gradle/actions)
         uses: gradle/actions/setup-gradle@v3
