@@ -2,6 +2,11 @@
 
 Android alarm clock that uses the phones flashlight rather than making sounds.
 
+Get the app from our [releases](https://github.com/Ghost-Applications/light-alarm), we recommend
+using [Obtainium](https://github.com/ImranR98/Obtainium) to manage versioning.
+
+Or you can grab it from the [Play Store]() ($5 because dealing with the play store is awful).
+
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
 
