@@ -14,16 +14,16 @@ plugins {
 
 android {
     namespace = "cash.andrew.lightalarm"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "rocks.ghostapps.lightalarm"
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 26
+        targetSdk = 36
 
         val buildNumber: String by project
         versionCode = if (buildNumber.isBlank()) 1 else buildNumber.toInt()
-        versionName = "ALifeBeyondTheDream"
+        versionName = "BackOnTheTrain"
     }
 
     signingConfigs {

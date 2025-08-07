@@ -3,6 +3,7 @@ package cash.andrew.lightalarm
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.os.Build
 import javax.inject.Inject
 
 abstract class AlarmApp : Application() {
