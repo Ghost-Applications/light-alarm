@@ -5,8 +5,8 @@ hilt = "2.57"
 
 [libraries]
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "34.1.0" }
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
 androidx-core = { module = "androidx.core:core-ktx", version = "1.16.0" }

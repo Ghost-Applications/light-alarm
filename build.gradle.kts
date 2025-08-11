@@ -89,8 +89,8 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     implementation(libs.material)
     implementation(libs.hilt.android)
