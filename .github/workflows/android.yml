@@ -34,7 +34,7 @@ jobs:
 
       - name: Set build number in gradle.properties
         run: |
-          echo "cash.andrew.lightalarm.buildNumber=${{ github.run_number }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.buildNumber=${{ github.run_id }}" >> gradle.properties
 
       - name: Build with Gradle (using gradle/actions)
         uses: gradle/actions/setup-gradle@v3
@@ -76,4 +76,4 @@ jobs:
           packageName: rocks.ghostapps.lightalarm
           releaseFiles: build/outputs/bundle/release/*.aab
           track: internal
-          status: draft
+          status: completed
