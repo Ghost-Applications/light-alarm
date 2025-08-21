@@ -36,7 +36,7 @@ jobs:
 
       - name: Set build number in gradle.properties
         run: |
-          echo "rcash.andrew.lightalarm.buildNumber=${{ github.run_number }}" >> gradle.properties
+          echo "cash.andrew.lightalarm.buildNumber=${{ github.run_number }}" >> gradle.properties
 
       - name: Build with Gradle (using gradle/actions)
         uses: gradle/actions/setup-gradle@v3
